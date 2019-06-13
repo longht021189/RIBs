@@ -1,0 +1,51 @@
+package ${package_name}
+
+import com.uber.rib.core.EmptyPresenter
+
+import javax.inject.Qualifier
+import javax.inject.Scope
+
+import dagger.Provides
+
+class ${rib_name}Builder(
+  private val injector: dagger.android.DispatchingAndroidInjector<Any>
+) {
+
+  fun build(): ${rib_name}Router {
+    val pack = ${rib_name}Pack()
+    injector.inject(pack)
+    return pack.router
+  }
+
+  class ${rib_name}Pack {
+    @javax.inject.Inject
+    lateinit var interactor: ${rib_name}Interactor
+
+    @javax.inject.Inject
+    lateinit var router: ${rib_name}Router
+  }
+
+  @dagger.Module
+  abstract class ParentModule {
+
+    @${rib_name}Scope
+    @dagger.android.ContributesAndroidInjector(modules = [Module::class])
+    abstract fun contribute${rib_name}PackInjector(): ${rib_name}Pack
+  }
+
+  @dagger.Module
+  internal abstract class Module {
+    // TODO: Create provider methods for dependencies created by this Rib. These methods should be static.
+  }
+
+  @Scope
+  @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
+  internal annotation class ${rib_name}Scope
+
+  @Qualifier
+  @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
+  internal annotation class ${rib_name}Internal
+
+  @${rib_name}Scope
+  class ${rib_name}Presenter @javax.inject.Inject constructor(): EmptyPresenter()
+}

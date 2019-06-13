@@ -1,0 +1,9 @@
+package ${package_name}
+
+import com.uber.rib.core.VatoBaseRouter
+
+@${rib_name}Builder.${rib_name}Scope
+class ${rib_name}Router @javax.inject.Inject constructor(
+    interactor: ${rib_name}Interactor,
+    val injector: dagger.android.DispatchingAndroidInjector<Any>
+) : VatoBaseRouter<${rib_name}Interactor>(interactor)
