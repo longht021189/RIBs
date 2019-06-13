@@ -1,0 +1,8 @@
+package com.uber.rib.sample.task
+
+@TaskBuilder.TaskScope
+class TaskRouter @javax.inject.Inject constructor(
+    view: TaskView,
+    interactor: TaskInteractor,
+    private val injector: dagger.android.DispatchingAndroidInjector<Any>
+) : com.uber.rib.core.ViewRouterSubcomponent<TaskView, TaskInteractor>(view, interactor)

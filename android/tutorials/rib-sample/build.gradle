@@ -21,11 +21,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation deps.external.dagger
+    implementation deps.external.daggerSupport
     implementation (project(':libraries:rib-android')) {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
@@ -38,6 +45,10 @@ dependencies {
     implementation (deps.support.appcompat) {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
+
+    kapt deps.apt.daggerCompiler
+    kapt deps.apt.daggerSupportProcessor
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
