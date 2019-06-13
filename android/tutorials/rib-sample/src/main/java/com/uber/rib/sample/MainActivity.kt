@@ -1,12 +1,12 @@
 package com.uber.rib.sample
 
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.view.ViewGroup
+import com.uber.rib.core.RibActivity
+import com.uber.rib.core.ViewRouter
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : RibActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override fun createRouter(parentViewGroup: ViewGroup?): ViewRouter<*, *, *> {
+        TODO("")
     }
 }
