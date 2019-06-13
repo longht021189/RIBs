@@ -71,6 +71,14 @@ public class RouterBase<I extends InteractorBase> {
    * @return TRUE if the interactor handles the back press.
    */
   public boolean handleBackPress() {
+    if (children.size() > 0) {
+      for (RouterBase child : children) {
+        if (child.handleBackPress()) {
+          return true;
+        }
+      }
+    }
+
     ribRefWatcher.logBreadcrumb("BACKPRESS", null, null);
     return getInteractor().handleBackPress();
   }
