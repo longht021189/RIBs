@@ -39,7 +39,7 @@ import static com.uber.rib.core.lifecycle.InteractorEvent.INACTIVE;
  * @param <P> the type of {@link Presenter}.
  * @param <R> the type of {@link Router}.
  */
-public abstract class InteractorBase<P, R extends Router>
+public abstract class InteractorBase<P, R extends RouterBase>
     implements LifecycleScopeProvider<InteractorEvent> {
 
   private static final CorrespondingEventsFunction<InteractorEvent> LIFECYCLE_MAP_FUNCTION =
@@ -58,14 +58,14 @@ public abstract class InteractorBase<P, R extends Router>
   private final Lazy<P> lazyPresenter;
   private final Lazy<R> lazyRouter;
 
-  InteractorBase(@NonNull Lazy<P> presenter, @NonNull Lazy<R> router) {
+  public InteractorBase(@NonNull Lazy<P> presenter, @NonNull Lazy<R> router) {
     this.lazyPresenter = presenter;
     this.lazyRouter = router;
 
     postInit(presenter, router);
   }
 
-  protected abstract void postInit(@NonNull Lazy<P> presenter, @NonNull Lazy<R> router);
+  protected void postInit(@NonNull Lazy<P> presenter, @NonNull Lazy<R> router) {}
 
   /** @return the router for this interactor. */
   public R getRouter() {

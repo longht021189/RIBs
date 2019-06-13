@@ -22,16 +22,15 @@ import android.view.View;
  *
  * @param <V> type of view owned by the router.
  * @param <I> type of interactor owned by the router.
- * @param <C> type of dependency owned by the router.
  */
-public abstract class ViewRouter<
-        V extends View, I extends Interactor, C extends InteractorBaseComponent>
-    extends Router<I, C> {
+public abstract class ViewRouterSubcomponent<
+        V extends View, I extends InteractorBase>
+    extends RouterBase<I> {
 
   private final V view;
 
-  public ViewRouter(V view, I interactor, C component) {
-    super(component, interactor);
+  public ViewRouterSubcomponent(V view, I interactor) {
+    super(interactor);
     this.view = view;
   }
 
