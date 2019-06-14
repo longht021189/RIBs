@@ -1,64 +1,44 @@
 package ${package_name}
 
-import dagger.Binds
-import dagger.Provides
-import javax.inject.Qualifier
-import javax.inject.Scope
+class ${rib_name}Builder {
 
-class ${rib_name}Builder(
-  private val injector: dagger.android.DispatchingAndroidInjector<Any>
-) {
+    @javax.inject.Inject lateinit var router: ${rib_name}Router
 
-  fun build(): ${rib_name}Router {
-    val pack = ${rib_name}Pack()
-    injector.inject(pack)
-    return pack.router
-  }
-
-  class ${rib_name}Pack {
-    @javax.inject.Inject
-    lateinit var interactor: ${rib_name}Interactor
-
-    @javax.inject.Inject
-    lateinit var router: ${rib_name}Router
-  }
-
-  @dagger.Module
-  abstract class ParentModule {
-
-    @${rib_name}Scope
-    @dagger.android.ContributesAndroidInjector(modules = [Module::class])
-    abstract fun contribute${rib_name}PackInjector(): ${rib_name}Pack
-  }
-
-  @dagger.Module
-  internal abstract class Module {
-
-    @${rib_name}Scope
-    @Binds
-    internal abstract fun presenter(view: ${rib_name}View): ${rib_name}Interactor.${rib_name}Presenter
-
-    @dagger.Module
-    companion object {
-
-      @${rib_name}Scope
-      @Provides
-      @JvmStatic
-      internal fun inflate${rib_name}View(
-          context: android.content.Context,
-          interactor: ${rib_name}Interactor): ${rib_name}View {
-        TODO("Inflate a new view using the provided inflater, or create a new view programatically using the")
-      }
+    fun build(injector: dagger.android.DispatchingAndroidInjector<Any>): ${rib_name}Router {
+        injector.inject(this)
+        return router
     }
 
-    // TODO: Create provider methods for dependencies created by this Rib. These should be static.
-  }
+    @dagger.Module
+    interface ParentModule {
 
-  @Scope
-  @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
-  internal annotation class ${rib_name}Scope
+        @${rib_name}Scope
+        @dagger.android.ContributesAndroidInjector(modules = [Module::class])
+        fun contribute${rib_name}BuilderInjector(): ${rib_name}Builder
+    }
 
-  @Qualifier
-  @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
-  internal annotation class ${rib_name}Internal
+    @dagger.Module
+    internal abstract class Module {
+
+        @${rib_name}Scope
+        @dagger.Binds
+        internal abstract fun presenter(view: ${rib_name}View): ${rib_name}Interactor.${rib_name}Presenter
+
+        @dagger.Module
+        companion object {
+
+            @${rib_name}Scope
+            @dagger.Provides
+            @JvmStatic
+            internal fun inflate${rib_name}View(): ${rib_name}View {
+                TODO("Inflate a new view using the provided inflater, or create a new view programatically using the provided context from the parentViewGroup.")
+            }
+        }
+
+        // TODO: Create provider methods for dependencies created by this Rib. These should be static.
+    }
+
+    @javax.inject.Scope
+    @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
+    internal annotation class ${rib_name}Scope
 }

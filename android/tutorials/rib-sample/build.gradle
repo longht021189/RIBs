@@ -31,8 +31,12 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation deps.external.dagger
-    implementation deps.external.daggerSupport
+    implementation (deps.external.dagger) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    implementation (deps.external.daggerSupport) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
     implementation (project(':libraries:rib-android')) {
         exclude group: 'com.android.support', module: 'support-annotations'
     }

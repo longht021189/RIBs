@@ -1,51 +1,31 @@
 package ${package_name}
 
-import com.uber.rib.core.EmptyPresenter
+class ${rib_name}Builder {
 
-import javax.inject.Qualifier
-import javax.inject.Scope
+    @javax.inject.Inject lateinit var router: ${rib_name}Router
 
-import dagger.Provides
+    fun build(injector: dagger.android.DispatchingAndroidInjector<Any>): ${rib_name}Router {
+        injector.inject(this)
+        return router
+    }
 
-class ${rib_name}Builder(
-  private val injector: dagger.android.DispatchingAndroidInjector<Any>
-) {
+    @dagger.Module
+    interface ParentModule {
 
-  fun build(): ${rib_name}Router {
-    val pack = ${rib_name}Pack()
-    injector.inject(pack)
-    return pack.router
-  }
+        @${rib_name}Scope
+        @dagger.android.ContributesAndroidInjector(modules = [Module::class])
+        fun contribute${rib_name}BuilderInjector(): ${rib_name}Builder
+    }
 
-  class ${rib_name}Pack {
-    @javax.inject.Inject
-    lateinit var interactor: ${rib_name}Interactor
+    @dagger.Module
+    internal abstract class Module {
+        // TODO: Create provider methods for dependencies created by this Rib. These methods should be static.
+    }
 
-    @javax.inject.Inject
-    lateinit var router: ${rib_name}Router
-  }
-
-  @dagger.Module
-  abstract class ParentModule {
+    @javax.inject.Scope
+    @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
+    internal annotation class ${rib_name}Scope
 
     @${rib_name}Scope
-    @dagger.android.ContributesAndroidInjector(modules = [Module::class])
-    abstract fun contribute${rib_name}PackInjector(): ${rib_name}Pack
-  }
-
-  @dagger.Module
-  internal abstract class Module {
-    // TODO: Create provider methods for dependencies created by this Rib. These methods should be static.
-  }
-
-  @Scope
-  @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
-  internal annotation class ${rib_name}Scope
-
-  @Qualifier
-  @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
-  internal annotation class ${rib_name}Internal
-
-  @${rib_name}Scope
-  class ${rib_name}Presenter @javax.inject.Inject constructor(): EmptyPresenter()
+    class ${rib_name}Presenter @javax.inject.Inject constructor(): com.uber.rib.core.EmptyPresenter()
 }

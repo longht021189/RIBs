@@ -41,6 +41,18 @@ public final class Generators {
     ViewGenerator viewGenerator = new ViewGenerator(packageName, ribName, isKotlinSelected, isSubcomponent);
     ViewRouterGenerator viewRouterGenerator = new ViewRouterGenerator(packageName, ribName, isKotlinSelected, isSubcomponent);
 
+    // TODO Subcomponent Packet is not Support Test yet
+    if (isSubcomponent) {
+      return new GeneratorPair(
+          ImmutableList.of(
+                  interactorGenerator,
+                  viewBuilderGenerator,
+                  viewGenerator,
+                  viewRouterGenerator),
+          ImmutableList.of()
+      );
+    }
+
     InteractorWithPresenterTestGenerator interactorWithPresenterTestGenerator =
         new InteractorWithPresenterTestGenerator(packageName, ribName, isKotlinSelected, isSubcomponent);
     ViewRouterTestGenerator viewRouterTestGenerator =
@@ -66,6 +78,14 @@ public final class Generators {
         new InteractorWithEmptyPresenterGenerator(packageName, ribName, isKotlinSelected, isSubcomponent);
     BuilderGenerator builderGenerator = new BuilderGenerator(packageName, ribName, isKotlinSelected, isSubcomponent);
     RouterGenerator routerGenerator = new RouterGenerator(packageName, ribName, isKotlinSelected, isSubcomponent);
+
+    // TODO Subcomponent Packet is not Support Test yet
+    if (isSubcomponent) {
+      return new GeneratorPair(
+          ImmutableList.of(interactorGenerator, builderGenerator, routerGenerator),
+          ImmutableList.of()
+      );
+    }
 
     InteractorWithEmptyPresenterTestGenerator interactorWithEmptyPresenterTestGenerator =
         new InteractorWithEmptyPresenterTestGenerator(packageName, ribName, isKotlinSelected, isSubcomponent);

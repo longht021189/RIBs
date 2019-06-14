@@ -6,9 +6,6 @@ class TaskInteractor @javax.inject.Inject constructor(
   router: dagger.Lazy<TaskRouter>
 ) : com.uber.rib.core.InteractorBase<TaskInteractor.TaskPresenter, TaskRouter>(presenter, router) {
 
-  @javax.inject.Inject @JvmField
-  internal var presenter: TaskPresenter? = null
-
   override fun didBecomeActive(savedInstanceState: com.uber.rib.core.Bundle?) {
     super.didBecomeActive(savedInstanceState)
 

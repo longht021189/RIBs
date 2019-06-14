@@ -1,28 +1,20 @@
 package ${package_name}
 
-import com.uber.rib.core.Bundle
-import com.uber.rib.core.EmptyPresenter
-import com.uber.rib.core.VatoBaseInteractor
-import com.uber.rib.core.RibInteractor
-import com.uber.rib.core.Router
-
-import javax.inject.Inject
-
 @${rib_name}Builder.${rib_name}Scope
 class ${rib_name}Interactor @javax.inject.Inject constructor(
   presenter: dagger.Lazy<${rib_name}Builder.${rib_name}Presenter>,
   router: dagger.Lazy<${rib_name}Router>
-) : VatoBaseInteractor<${rib_name}Builder.${rib_name}Presenter, ${rib_name}Router>(presenter, router) {
+) : com.uber.rib.core.InteractorBase<${rib_name}Builder.${rib_name}Presenter, ${rib_name}Router>(presenter, router) {
 
-  override fun didBecomeActive(savedInstanceState: Bundle?) {
-    super.didBecomeActive(savedInstanceState)
+    override fun didBecomeActive(savedInstanceState: com.uber.rib.core.Bundle?) {
+        super.didBecomeActive(savedInstanceState)
 
-    // TODO: Add attachment logic here (RxSubscriptions, etc.).
-  }
+        // TODO: Add attachment logic here (RxSubscriptions, etc.).
+    }
 
-  override fun willResignActive() {
-    super.willResignActive()
+    override fun willResignActive() {
+        super.willResignActive()
 
-    // TODO: Perform any required clean up here, or delete this method entirely if not needed.
-  }
+        // TODO: Perform any required clean up here, or delete this method entirely if not needed.
+    }
 }
