@@ -31,7 +31,8 @@ class TaskBuilder {
             @dagger.Provides
             @JvmStatic
             internal fun inflateTaskView(): TaskView {
-                TODO("Inflate a new view using the provided inflater, or create a new view programatically using the provided context from the parentViewGroup.")
+                TODO("Inflate a new view using the provided inflater, or create a " +
+                        "new view programmatically using the provided context from the parentViewGroup.")
             }
         }
 

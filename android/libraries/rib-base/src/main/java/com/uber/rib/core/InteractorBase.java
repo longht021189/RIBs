@@ -18,7 +18,6 @@ package com.uber.rib.core;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
 import com.jakewharton.rxrelay2.BehaviorRelay;
 import com.jakewharton.rxrelay2.Relay;
 import com.uber.autodispose.lifecycle.CorrespondingEventsFunction;
@@ -141,8 +140,8 @@ public abstract class InteractorBase<P, R extends RouterBase>
   }
 
   /** @return the currently attached presenter if there is one */
-  @VisibleForTesting
-  private P getPresenter() {
+  @NonNull
+  public P getPresenter() {
     P presenter = lazyPresenter.get();
     if (presenter == null) {
       throw new IllegalStateException("Attempting to get interactor's presenter before being set.");

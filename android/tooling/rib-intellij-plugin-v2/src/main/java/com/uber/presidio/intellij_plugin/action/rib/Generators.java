@@ -33,7 +33,15 @@ public final class Generators {
    * @return a list of generators to use when generating a rib with a presenter and view.
    */
   public static GeneratorPair getGeneratorsForRibWithPresenterAndView(
-      String packageName, String ribName, boolean isKotlinSelected, boolean isSubcomponent, boolean createLayout) {
+      String packageName, String ribName, boolean isKotlinSelected, boolean isSubcomponent,
+      boolean createLayout, boolean createViewAsync) {
+
+    if (isSubcomponent && !isKotlinSelected) {
+      throw new RuntimeException("Java Subcomponent is not Supported yet.");
+    }
+    if (createLayout) {
+      throw new RuntimeException("Create Layout is not Supported yet.");
+    }
 
     InteractorWithPresenterGenerator interactorGenerator =
         new InteractorWithPresenterGenerator(packageName, ribName, isKotlinSelected, isSubcomponent);
@@ -45,10 +53,10 @@ public final class Generators {
     if (isSubcomponent) {
       return new GeneratorPair(
           ImmutableList.of(
-                  interactorGenerator,
-                  viewBuilderGenerator,
-                  viewGenerator,
-                  viewRouterGenerator),
+              interactorGenerator,
+              viewBuilderGenerator,
+              viewGenerator,
+              viewRouterGenerator),
           ImmutableList.of()
       );
     }
