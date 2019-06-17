@@ -4,7 +4,7 @@ package ${package_name}
 class ${rib_name}Interactor @javax.inject.Inject constructor(
   presenter: dagger.Lazy<${rib_name}Builder.${rib_name}Presenter>,
   router: dagger.Lazy<${rib_name}Router>
-) : com.uber.rib.core.InteractorBase<${rib_name}Builder.${rib_name}Presenter, ${rib_name}Router>(presenter, router) {
+) : com.uber.rib.core.Interactor<${rib_name}Builder.${rib_name}Presenter, ${rib_name}Router>(presenter, router) {
 
     override fun didBecomeActive(savedInstanceState: com.uber.rib.core.Bundle?) {
         super.didBecomeActive(savedInstanceState)

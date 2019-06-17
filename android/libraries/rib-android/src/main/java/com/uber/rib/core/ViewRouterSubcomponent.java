@@ -24,8 +24,8 @@ import android.view.View;
  * @param <I> type of interactor owned by the router.
  */
 public abstract class ViewRouterSubcomponent<
-        V extends View, I extends InteractorBase>
-    extends RouterBase<I> {
+        V extends View, I extends Interactor>
+    extends Router<I> {
 
   private final V view;
 

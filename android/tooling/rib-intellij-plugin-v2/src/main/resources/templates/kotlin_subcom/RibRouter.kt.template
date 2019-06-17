@@ -4,4 +4,4 @@ package ${package_name}
 class ${rib_name}Router @javax.inject.Inject constructor(
     interactor: ${rib_name}Interactor,
     private val injector: dagger.android.DispatchingAndroidInjector<Any>
-) : com.uber.rib.core.RouterBase<${rib_name}Interactor>(interactor)
+) : com.uber.rib.core.Router<${rib_name}Interactor>(interactor)

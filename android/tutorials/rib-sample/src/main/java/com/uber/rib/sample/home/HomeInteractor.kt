@@ -4,7 +4,7 @@ package com.uber.rib.sample.home
 class HomeInteractor @javax.inject.Inject constructor(
   presenter: dagger.Lazy<HomeBuilder.HomePresenter>,
   router: dagger.Lazy<HomeRouter>
-) : com.uber.rib.core.InteractorBase<HomeBuilder.HomePresenter, HomeRouter>(presenter, router) {
+) : com.uber.rib.core.Interactor<HomeBuilder.HomePresenter, HomeRouter>(presenter, router) {
 
     override fun didBecomeActive(savedInstanceState: com.uber.rib.core.Bundle?) {
         super.didBecomeActive(savedInstanceState)

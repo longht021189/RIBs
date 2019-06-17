@@ -4,7 +4,7 @@ package com.uber.rib.sample.task
 class TaskInteractor @javax.inject.Inject constructor(
   presenter: dagger.Lazy<TaskPresenter>,
   router: dagger.Lazy<TaskRouter>
-) : com.uber.rib.core.InteractorBase<TaskInteractor.TaskPresenter, TaskRouter>(presenter, router) {
+) : com.uber.rib.core.Interactor<TaskInteractor.TaskPresenter, TaskRouter>(presenter, router) {
 
   override fun didBecomeActive(savedInstanceState: com.uber.rib.core.Bundle?) {
     super.didBecomeActive(savedInstanceState)

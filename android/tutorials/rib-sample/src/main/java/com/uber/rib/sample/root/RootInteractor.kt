@@ -1,7 +1,7 @@
 package com.uber.rib.sample.root
 
 import com.uber.rib.core.Bundle
-import com.uber.rib.core.Interactor
+import com.uber.rib.core.InteractorOld
 import com.uber.rib.core.RibInteractor
 import javax.inject.Inject
 
@@ -11,7 +11,7 @@ import javax.inject.Inject
  * TODO describe the logic of this scope.
  */
 @RibInteractor
-class RootInteractor : Interactor<RootInteractor.RootPresenter, RootRouter>() {
+class RootInteractor : InteractorOld<RootInteractor.RootPresenter, RootRouter>() {
 
   @Inject
   lateinit var presenter: RootPresenter

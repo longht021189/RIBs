@@ -4,4 +4,4 @@ package com.uber.rib.sample.home
 class HomeRouter @javax.inject.Inject constructor(
     interactor: HomeInteractor,
     private val injector: dagger.android.DispatchingAndroidInjector<Any>
-) : com.uber.rib.core.RouterBase<HomeInteractor>(interactor)
+) : com.uber.rib.core.Router<HomeInteractor>(interactor)
