@@ -1,10 +1,10 @@
-package com.uber.rib.sample.task
+package com.uber.rib.sample.splash
 
-@TaskBuilder.TaskScope
-class TaskInteractor @javax.inject.Inject constructor(
-  presenter: dagger.Lazy<TaskPresenter>,
-  router: dagger.Lazy<TaskRouter>
-) : com.uber.rib.core.Interactor<TaskInteractor.TaskPresenter, TaskRouter>(presenter, router) {
+@SplashBuilder.SplashScope
+class SplashInteractor @javax.inject.Inject constructor(
+  presenter: dagger.Lazy<SplashPresenter>,
+  router: dagger.Lazy<SplashRouter>
+) : com.uber.rib.core.Interactor<SplashInteractor.SplashPresenter, SplashRouter>(presenter, router) {
 
   override fun didBecomeActive(savedInstanceState: com.uber.rib.core.Bundle?) {
     super.didBecomeActive(savedInstanceState)
@@ -18,5 +18,5 @@ class TaskInteractor @javax.inject.Inject constructor(
     // TODO: Perform any required clean up here, or delete this method entirely if not needed.
   }
 
-  interface TaskPresenter
+  interface SplashPresenter
 }

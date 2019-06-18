@@ -25,7 +25,7 @@ import android.view.View;
  */
 public abstract class ViewRouterSubcomponent<
         V extends View, I extends Interactor>
-    extends Router<I> {
+    extends Router<I> implements IViewRouter<V> {
 
   private final V view;
 
@@ -35,7 +35,23 @@ public abstract class ViewRouterSubcomponent<
   }
 
   /** @return the router's view. */
+  @Override
   public V getView() {
     return view;
+  }
+
+  @Override
+  public void dispatchDetach() {
+    super.dispatchDetach();
+  }
+
+  @Override
+  public void saveInstanceState(Bundle bundle) {
+    super.saveInstanceState(bundle);
+  }
+
+  @Override
+  public void dispatchAttach(Bundle bundle) {
+    super.dispatchAttach(bundle);
   }
 }

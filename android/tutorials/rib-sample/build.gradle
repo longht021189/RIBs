@@ -33,27 +33,35 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation (deps.external.dagger) {
         exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.guava', module: 'guava'
     }
     implementation (deps.external.daggerSupport) {
         exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.guava', module: 'guava'
     }
     implementation (project(':libraries:rib-android')) {
         exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.guava', module: 'guava'
     }
     implementation (project(':libraries:rib-base')) {
         exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.guava', module: 'guava'
     }
     implementation (project(':libraries:rib-uava')) {
         exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.guava', module: 'guava'
     }
     implementation (project(':libraries:rib-router-navigator')) {
         exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.guava', module: 'guava'
     }
     implementation (deps.support.appcompat) {
         exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.guava', module: 'guava'
     }
     implementation "com.google.dagger:dagger-producers:${deps.versions.dagger}"
     implementation 'com.android.support:support-annotations:28.0.0'
+    implementation 'com.google.guava:guava:28.0-android'
 
     kapt deps.apt.daggerCompiler
     kapt deps.apt.daggerSupportProcessor

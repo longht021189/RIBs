@@ -1,5 +1,8 @@
 package com.uber.rib.sample.home
 
+import android.graphics.Color
+import com.uber.rib.sample.MainActivity
+
 class HomeBuilder {
 
     @javax.inject.Inject lateinit var router: HomeRouter
@@ -19,13 +22,26 @@ class HomeBuilder {
 
     @dagger.Module
     internal abstract class Module {
-        // TODO: Create provider methods for dependencies created by this Rib. These methods should be static.
+
+        @HomeScope
+        @dagger.Binds
+        internal abstract fun presenter(view: HomeView): HomeInteractor.HomePresenter
+
+        @dagger.Module
+        companion object {
+
+            @HomeScope
+            @dagger.Provides
+            @JvmStatic
+            internal fun inflateHomeView(activity: MainActivity): HomeView {
+                return HomeView(activity).apply {
+                    setBackgroundColor(Color.MAGENTA)
+                }
+            }
+        }
     }
 
     @javax.inject.Scope
     @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
     internal annotation class HomeScope
-
-    @HomeScope
-    class HomePresenter @javax.inject.Inject constructor(): com.uber.rib.core.EmptyPresenter()
 }

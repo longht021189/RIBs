@@ -1,35 +1,32 @@
 package com.uber.rib.sample.root
 
-import com.uber.rib.core.Bundle
-import com.uber.rib.core.InteractorOld
-import com.uber.rib.core.RibInteractor
-import javax.inject.Inject
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 
-/**
- * Coordinates Business Logic for [RootScope].
- *
- * TODO describe the logic of this scope.
- */
-@RibInteractor
-class RootInteractor : InteractorOld<RootInteractor.RootPresenter, RootRouter>() {
+@RootBuilder.RootScope
+class RootInteractor @javax.inject.Inject constructor(
+    presenter: dagger.Lazy<RootPresenter>,
+    router: dagger.Lazy<RootRouter>
+) : com.uber.rib.core.Interactor<RootInteractor.RootPresenter, RootRouter>(presenter, router) {
 
-  @Inject
-  lateinit var presenter: RootPresenter
+    private val disposables by lazy {
+        CompositeDisposable()
+    }
 
-  override fun didBecomeActive(savedInstanceState: Bundle?) {
-    super.didBecomeActive(savedInstanceState)
+    override fun didBecomeActive(savedInstanceState: com.uber.rib.core.Bundle?) {
+        super.didBecomeActive(savedInstanceState)
+        router.routeToSplash()
+        disposables.add(presenter.click.subscribe {
+            router.routeToHome()
+        })
+    }
 
-    // TODO: Add attachment logic here (RxSubscriptions, etc.).
-  }
+    override fun willResignActive() {
+        disposables.clear()
+        super.willResignActive()
+    }
 
-  override fun willResignActive() {
-    super.willResignActive()
-
-    // TODO: Perform any required clean up here, or delete this method entirely if not needed.
-  }
-
-  /**
-   * Presenter interface implemented by this RIB's view.
-   */
-  interface RootPresenter
+    interface RootPresenter {
+        val click: Observable<Any>
+    }
 }
