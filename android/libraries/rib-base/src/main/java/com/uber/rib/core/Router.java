@@ -25,14 +25,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.uber.rib.core.Preconditions.checkNotNull;
+import static com.uber.rib.core.Preconditions.*;
 
 /**
  * Responsible for handling the addition and removal of children routers.
  *
  * @param <I> type of interactor this router routes.
  */
-public class Router<I extends Interactor> {
+public class Router<I extends com.uber.rib.core.Interactor> {
 
   @VisibleForTesting static final String KEY_CHILD_ROUTERS = "Router.childRouters";
   @VisibleForTesting static final String KEY_INTERACTOR = "Router.interactor";
@@ -40,7 +40,7 @@ public class Router<I extends Interactor> {
   private final List<Router> children = new CopyOnWriteArrayList<>();
   private final I interactor;
   private final Thread mainThread;
-  private final RibRefWatcher ribRefWatcher;
+  private final com.uber.rib.core.RibRefWatcher ribRefWatcher;
 
   private String tag;
 
@@ -49,12 +49,12 @@ public class Router<I extends Interactor> {
   private boolean isLoaded;
 
   public Router(I interactor) {
-    this(interactor, RibRefWatcher.getInstance(), getMainThread());
+    this(interactor, com.uber.rib.core.RibRefWatcher.getInstance(), getMainThread());
   }
 
   @SuppressWarnings("unchecked")
   Router(
-          I interactor, RibRefWatcher ribRefWatcher, Thread mainThread) {
+      I interactor, com.uber.rib.core.RibRefWatcher ribRefWatcher, Thread mainThread) {
     this.interactor = interactor;
     this.ribRefWatcher = ribRefWatcher;
     this.mainThread = mainThread;
@@ -125,20 +125,20 @@ public class Router<I extends Interactor> {
     for (Router child : children) {
       if (tag.equals(child.tag)) {
         Rib.getConfiguration()
-                .handleNonFatalWarning(
-                        String.format(
-                                Locale.getDefault(), "There is already a child router with tag: %s", tag),
-                        null);
+            .handleNonFatalWarning(
+                String.format(
+                    Locale.getDefault(), "There is already a child router with tag: %s", tag),
+                null);
       }
     }
 
     children.add(childRouter);
     ribRefWatcher.logBreadcrumb(
-            "ATTACHED", childRouter.getClass().getSimpleName(), this.getClass().getSimpleName());
+        "ATTACHED", childRouter.getClass().getSimpleName(), this.getClass().getSimpleName());
     Bundle childBundle = null;
     if (this.savedInstanceState != null) {
       Bundle previousChildren =
-              checkNotNull(this.savedInstanceState.getBundleExtra(KEY_CHILD_ROUTERS));
+          checkNotNull(this.savedInstanceState.getBundleExtra(KEY_CHILD_ROUTERS));
       childBundle = previousChildren.getBundleExtra(tag);
     }
 
@@ -161,10 +161,10 @@ public class Router<I extends Interactor> {
     Interactor interactor = childRouter.getInteractor();
     ribRefWatcher.watchDeletedObject(interactor);
     ribRefWatcher.logBreadcrumb(
-            "DETACHED", childRouter.getClass().getSimpleName(), this.getClass().getSimpleName());
+        "DETACHED", childRouter.getClass().getSimpleName(), this.getClass().getSimpleName());
     if (savedInstanceState != null) {
       Bundle childrenBundles =
-              checkNotNull(savedInstanceState.getBundleExtra(KEY_CHILD_ROUTERS));
+          checkNotNull(savedInstanceState.getBundleExtra(KEY_CHILD_ROUTERS));
       childrenBundles.putBundleExtra(childRouter.tag, null);
     }
 
@@ -224,7 +224,7 @@ public class Router<I extends Interactor> {
     return tag;
   }
 
-  void saveInstanceState(Bundle outState) {
+  void saveInstanceState(com.uber.rib.core.Bundle outState) {
     Bundle interactorSavedInstanceState = new Bundle();
     getInteractor().onSaveInstanceState(interactorSavedInstanceState);
     outState.putBundleExtra(KEY_INTERACTOR, interactorSavedInstanceState);

@@ -18,6 +18,8 @@ package com.uber.rib.core;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+
 import com.jakewharton.rxrelay2.BehaviorRelay;
 import com.jakewharton.rxrelay2.Relay;
 import com.uber.autodispose.lifecycle.CorrespondingEventsFunction;
@@ -26,8 +28,12 @@ import com.uber.autodispose.lifecycle.LifecycleScopeProvider;
 import com.uber.autodispose.lifecycle.LifecycleScopes;
 import com.uber.rib.core.lifecycle.InteractorEvent;
 import dagger.Lazy;
+
+import javax.inject.Inject;
+
 import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
+import io.reactivex.functions.Function;
 
 import static com.uber.rib.core.lifecycle.InteractorEvent.ACTIVE;
 import static com.uber.rib.core.lifecycle.InteractorEvent.INACTIVE;
@@ -39,17 +45,17 @@ import static com.uber.rib.core.lifecycle.InteractorEvent.INACTIVE;
  * @param <R> the type of {@link Router}.
  */
 public abstract class Interactor<P, R extends Router>
-        implements LifecycleScopeProvider<InteractorEvent> {
+    implements LifecycleScopeProvider<InteractorEvent> {
 
   private static final CorrespondingEventsFunction<InteractorEvent> LIFECYCLE_MAP_FUNCTION =
-          interactorEvent -> {
-            switch (interactorEvent) {
-              case ACTIVE:
-                return INACTIVE;
-              default:
-                throw new LifecycleEndedException();
-            }
-          };
+      interactorEvent -> {
+        switch (interactorEvent) {
+          case ACTIVE:
+            return INACTIVE;
+          default:
+            throw new LifecycleEndedException();
+        }
+      };
 
   private final BehaviorRelay<InteractorEvent> behaviorRelay = BehaviorRelay.create();
   private final Relay<InteractorEvent> lifecycleRelay = behaviorRelay.toSerialized();
