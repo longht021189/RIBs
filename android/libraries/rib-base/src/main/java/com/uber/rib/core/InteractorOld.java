@@ -1,7 +1,7 @@
 package com.uber.rib.core;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import dagger.Lazy;
 
 import javax.inject.Inject;

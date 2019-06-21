@@ -1,12 +1,10 @@
 package com.uber.rib.core.navigation
 
 import android.net.Uri
-import android.support.v4.util.ArrayMap
-import android.support.v4.util.LruCache
+import androidx.collection.ArrayMap
+import androidx.collection.LruCache
 import java.io.Closeable
-import java.lang.IllegalArgumentException
 import java.lang.ref.WeakReference
-import java.util.*
 
 abstract class Navigation(
     private val maxSizeCache: Int = MAX_SIZE_CACHE_DEFAULT
