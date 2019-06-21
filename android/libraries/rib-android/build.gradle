@@ -21,6 +21,9 @@ buildscript {
 }
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion deps.build.compileSdkVersion
@@ -44,6 +47,7 @@ dependencies {
     implementation deps.apt.javaxInject
     implementation deps.support.annotations
     implementation deps.support.appcompat
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

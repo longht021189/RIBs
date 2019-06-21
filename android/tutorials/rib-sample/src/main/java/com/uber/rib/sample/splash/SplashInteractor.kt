@@ -2,21 +2,31 @@ package com.uber.rib.sample.splash
 
 @SplashBuilder.SplashScope
 class SplashInteractor @javax.inject.Inject constructor(
-  presenter: dagger.Lazy<SplashPresenter>,
-  router: dagger.Lazy<SplashRouter>
-) : com.uber.rib.core.Interactor<SplashInteractor.SplashPresenter, SplashRouter>(presenter, router) {
+    presenter: dagger.Lazy<SplashPresenter>,
+    router: dagger.Lazy<SplashRouter>,
+    private val navigation: com.uber.rib.core.navigation.Navigation
+) : com.uber.rib.core.Interactor<SplashInteractor.SplashPresenter, SplashRouter>(presenter, router),
+    com.uber.rib.core.navigation.Node {
 
-  override fun didBecomeActive(savedInstanceState: com.uber.rib.core.Bundle?) {
-    super.didBecomeActive(savedInstanceState)
+    private val nodeName = "SPLASH"
+    private val backStackName = "MAIN"
+    private val nodeManager by lazy {
+        navigation.getNodeManager(backStackName)
+    }
 
-    // TODO: Add attachment logic here (RxSubscriptions, etc.).
-  }
+    override fun didBecomeActive(savedInstanceState: com.uber.rib.core.Bundle?) {
+        super.didBecomeActive(savedInstanceState)
+        nodeManager.addNode(nodeName, this)
+    }
 
-  override fun willResignActive() {
-    super.willResignActive()
+    override fun onNavigation(pathSegments: List<String>) {
 
-    // TODO: Perform any required clean up here, or delete this method entirely if not needed.
-  }
+    }
 
-  interface SplashPresenter
+    override fun willResignActive() {
+        nodeManager.removeNode(nodeName)
+        super.willResignActive()
+    }
+
+    interface SplashPresenter
 }
