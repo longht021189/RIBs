@@ -7,7 +7,19 @@ import com.uber.rib.core.navigation.Navigation as Base
 
 @Singleton
 class Navigation @Inject constructor(): Base() {
+
     init {
-        createBackStack("MAIN", Uri.parse("/ROOT/SPLASH"))
+        createBackStack(BACK_STACK_MAIN, SCREEN_SPLASH)
+    }
+
+    companion object {
+        const val BACK_STACK_MAIN = "MAIN"
+
+        val SCREEN_SPLASH: Uri = Uri.parse("/ROOT/SPLASH")
+        val SCREEN_HOME: Uri   = Uri.parse("/ROOT/HOME")
+
+        const val NODE_ROOT   = "ROOT"
+        const val NODE_SPLASH = "SPLASH"
+        const val NODE_HOME   = "HOME"
     }
 }

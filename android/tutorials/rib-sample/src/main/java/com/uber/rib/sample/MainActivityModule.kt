@@ -1,8 +1,11 @@
 package com.uber.rib.sample
 
+import com.uber.rib.sample.dialog.MyDialog
+import com.uber.rib.sample.dialog.MyDialogBuilder
 import com.uber.rib.sample.root.RootBuilder
-import dagger.Module
 import dagger.Binds
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
 import javax.inject.Singleton
 import com.uber.rib.core.navigation.Navigation as Base
 
@@ -12,4 +15,8 @@ abstract class MainActivityModule {
     @Binds
     @Singleton
     abstract fun bindNavigation(navigation: Navigation): Base
+
+    @ContributesAndroidInjector(modules = [MyDialogBuilder.ParentModule::class])
+    @MyDialog.MyDialogScope
+    abstract fun contributeMyDialog(): MyDialog
 }

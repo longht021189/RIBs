@@ -1,5 +1,7 @@
 package com.uber.rib.sample.home
 
+import com.uber.rib.sample.Navigation
+
 @HomeBuilder.HomeScope
 class HomeInteractor @javax.inject.Inject constructor(
     presenter: dagger.Lazy<HomePresenter>,
@@ -8,8 +10,8 @@ class HomeInteractor @javax.inject.Inject constructor(
 ) : com.uber.rib.core.Interactor<HomeInteractor.HomePresenter, HomeRouter>(presenter, router),
     com.uber.rib.core.navigation.Node {
 
-    private val nodeName = "HOME"
-    private val backStackName = "MAIN"
+    private val nodeName = Navigation.NODE_HOME
+    private val backStackName = Navigation.BACK_STACK_MAIN
     private val nodeManager by lazy {
         navigation.getNodeManager(backStackName)
     }
@@ -19,7 +21,7 @@ class HomeInteractor @javax.inject.Inject constructor(
         nodeManager.addNode(nodeName, this)
     }
 
-    override fun onNavigation(pathSegments: List<String>) {
+    override fun onNavigation(child: String?) {
 
     }
 

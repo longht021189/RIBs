@@ -5,11 +5,13 @@ import androidx.collection.ArrayMap
 import androidx.collection.LruCache
 import java.io.Closeable
 import java.lang.ref.WeakReference
+import java.util.*
 
 abstract class Navigation(
     private val maxSizeCache: Int = MAX_SIZE_CACHE_DEFAULT
 ) : Closeable {
     private var isClosed = false
+
     private val lruCache by lazy {
         LruCache<String, Node>(maxSizeCache)
     }
@@ -26,7 +28,7 @@ abstract class Navigation(
             throw IllegalArgumentException("Back Stack $backStackName Is Exists.")
         }
 
-        managerMap[backStackName] = Manager(backStackName, defaultUri)
+        managerMap[backStackName] = Manager(defaultUri)
     }
 
     fun getNodeManager(backStackName: String): NodeManager {
@@ -38,6 +40,20 @@ abstract class Navigation(
             ?: throw IllegalArgumentException("Back Stack $backStackName Is Not Exists.")
     }
 
+    private fun getNode(name: String): Node? {
+        return nodeMap[name]?.get()
+    }
+
+    open fun onBackPressed(): Boolean {
+        managerMap.forEach {
+            if (it.value.onBackPressed()) {
+                return true
+            }
+        }
+
+        return false
+    }
+
     override fun close() {
         if (isClosed) return
         isClosed = true
@@ -46,32 +62,63 @@ abstract class Navigation(
         managerMap.clear()
     }
 
-//    private fun getNode(name: String): Node? {
-//        return nodeMap[name]?.get()
-//    }
-//    fun openUri(uri: Uri) {
-//        val pathSegments = LinkedList<String>()
-//
-//        uri.pathSegments.reversed().forEach {
-//            val node = getNode(it)
-//
-//            if (node != null) {
-//                node.onNavigation(pathSegments)
-//                return
-//            } else {
-//                pathSegments.add(0, it)
-//            }
-//        }
-//    }
+    private inner class Manager(defaultUri: Uri) : NodeManager, Closeable {
 
-    private inner class Manager(
-        private val backStackName: String,
-        private val defaultUri: Uri
-    ) : NodeManager, Closeable {
+        private val uriStack by lazy {
+            val stack = Stack<Uri>()
+            stack.push(defaultUri)
+            stack
+        }
+
+        private fun onRefresh() {
+            val path = uriStack.peek() ?: return
+            var child: String? = null
+            var node: Node? = null
+
+            run onNavigation@ {
+                path.pathSegments.forEach { name ->
+                    val n = getNode(name)
+                    if (n != null) {
+                        node = n
+                    } else {
+                        child = name
+                        return@onNavigation
+                    }
+                }
+            }
+
+            node?.onNavigation(child)
+        }
+
+        override fun add(path: Uri) {
+            if (path == uriStack.peek()) return
+
+            uriStack.push(path)
+
+            onRefresh()
+        }
+
+        override fun replace(path: Uri, removeDepth: Int) {
+            var depth = removeDepth
+
+            while (!uriStack.empty() && depth != 0) {
+                uriStack.pop()
+                depth--
+            }
+
+            add(path)
+        }
 
         override fun addNode(name: String, node: Node) {
+            if (isClosed) return
+
             lruCache.put(name, node)
             nodeMap[name] = WeakReference(node)
+
+            val pathSegments = uriStack.peek().pathSegments
+            val index = pathSegments.indexOf(name)
+
+            node.onNavigation(if (index < pathSegments.size - 1) { pathSegments[index + 1] } else { null })
         }
 
         override fun removeNode(name: String) {
@@ -79,9 +126,18 @@ abstract class Navigation(
             nodeMap.remove(name)
         }
 
-        override fun close() {
+        fun onBackPressed(): Boolean {
+            if (uriStack.size <= 1) {
+                return false
+            }
 
+            uriStack.pop()
+            onRefresh()
+
+            return true
         }
+
+        override fun close() {}
     }
 
     companion object {
