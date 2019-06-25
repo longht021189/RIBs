@@ -22,7 +22,7 @@ public class ViewBuilderGenerator extends Generator {
   private static final String TEMPLATE_NAME = "RibViewBuilder";
 
   public ViewBuilderGenerator(String packageName, String ribName, boolean isKotlinSelected, boolean isSubcomponent) {
-    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME, isSubcomponent);
+    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME, isSubcomponent, false);
   }
 
   @Override

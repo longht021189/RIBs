@@ -55,7 +55,7 @@ public abstract class Generator {
    * @param ribName      rib name.
    * @param templateName template to be used by this generate.
    */
-  public Generator(String packageName, String ribName, boolean isKotlin, String templateName, boolean isSubcomponent) {
+  public Generator(String packageName, String ribName, boolean isKotlin, String templateName, boolean isSubcomponent, boolean useNavigation) {
     this.packageName = packageName;
     this.ribName = ribName;
     this.isKotlin = isKotlin;
@@ -91,7 +91,11 @@ public abstract class Generator {
 
       if (isKotlin) {
         if (isSubcomponent) {
-          resource = "/templates/kotlin_subcom/" + templateName + ".kt.template";
+          if (useNavigation) {
+            resource = "/templates/kotlin_subcom_nav/" + templateName + ".kt.template";
+          } else {
+            resource = "/templates/kotlin_subcom/" + templateName + ".kt.template";
+          }
         } else {
           resource = "/templates/kotlin/" + templateName + ".kt.template";
         }

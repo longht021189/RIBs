@@ -1,0 +1,36 @@
+package ${package_name}
+
+@${rib_name}Builder.${rib_name}Scope
+class ${rib_name}Interactor @javax.inject.Inject constructor(
+    presenter: dagger.Lazy<${rib_name}Presenter>,
+    router: dagger.Lazy<${rib_name}Router>,
+    private val navigation: com.uber.rib.core.navigation.Navigation
+) : com.uber.rib.core.Interactor<${rib_name}Interactor.${rib_name}Presenter, ${rib_name}Router>(presenter, router),
+    com.uber.rib.core.navigation.Node {
+
+    private val nodeName: String = TODO("nodeName, String HERE")
+    private val backStackName: String = TODO("backStackName, String HERE")
+    private val nodeManager by lazy {
+        navigation.getNodeManager(backStackName)
+    }
+
+    override fun didBecomeActive(savedInstanceState: com.uber.rib.core.Bundle?) {
+        super.didBecomeActive(savedInstanceState)
+        nodeManager.addNode(nodeName, this)
+
+        // TODO: Add attachment logic here (RxSubscriptions, etc.).
+    }
+
+    override fun onNavigation(child: String?) {
+        // TODO: Update Child HERE
+    }
+
+    override fun willResignActive() {
+        // TODO: Perform any required clean up here, or delete this method entirely if not needed.
+
+        nodeManager.removeNode(nodeName)
+        super.willResignActive()
+    }
+
+    interface ${rib_name}Presenter
+}

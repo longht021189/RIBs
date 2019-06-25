@@ -34,7 +34,7 @@ public final class Generators {
    */
   public static GeneratorPair getGeneratorsForRibWithPresenterAndView(
       String packageName, String ribName, boolean isKotlinSelected, boolean isSubcomponent,
-      boolean createLayout, boolean createViewAsync) {
+      boolean createLayout, boolean createViewAsync, boolean useNavigation) {
 
     if (isSubcomponent && !isKotlinSelected) {
       throw new RuntimeException("Java Subcomponent is not Supported yet.");
@@ -44,7 +44,7 @@ public final class Generators {
     }
 
     InteractorWithPresenterGenerator interactorGenerator =
-        new InteractorWithPresenterGenerator(packageName, ribName, isKotlinSelected, isSubcomponent);
+        new InteractorWithPresenterGenerator(packageName, ribName, isKotlinSelected, isSubcomponent, useNavigation);
     ViewBuilderGenerator viewBuilderGenerator = new ViewBuilderGenerator(packageName, ribName, isKotlinSelected, isSubcomponent);
     ViewGenerator viewGenerator = new ViewGenerator(packageName, ribName, isKotlinSelected, isSubcomponent);
     ViewRouterGenerator viewRouterGenerator = new ViewRouterGenerator(packageName, ribName, isKotlinSelected, isSubcomponent);
@@ -81,9 +81,9 @@ public final class Generators {
    * @return a list of generators to use when generating a rib without a presenter and view.
    */
   public static GeneratorPair getGeneratorsForRibWithoutPresenterAndView(
-      String packageName, String ribName, boolean isKotlinSelected, boolean isSubcomponent) {
+      String packageName, String ribName, boolean isKotlinSelected, boolean isSubcomponent, boolean useNavigation) {
     InteractorWithEmptyPresenterGenerator interactorGenerator =
-        new InteractorWithEmptyPresenterGenerator(packageName, ribName, isKotlinSelected, isSubcomponent);
+        new InteractorWithEmptyPresenterGenerator(packageName, ribName, isKotlinSelected, isSubcomponent, useNavigation);
     BuilderGenerator builderGenerator = new BuilderGenerator(packageName, ribName, isKotlinSelected, isSubcomponent);
     RouterGenerator routerGenerator = new RouterGenerator(packageName, ribName, isKotlinSelected, isSubcomponent);
 

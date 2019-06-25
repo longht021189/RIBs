@@ -33,6 +33,7 @@ public class GenerateRibDialog extends DialogWrapper {
   private JCheckBox createSubcomponent;
   private JCheckBox createLayout;
   private JCheckBox createViewAsync;
+  private JCheckBox useNavigation;
 
   public GenerateRibDialog(final Listener listener) {
     super(null);
@@ -50,6 +51,7 @@ public class GenerateRibDialog extends DialogWrapper {
       }
     });
 
+    useNavigation.setSelected(true);
     createKotlinCode.setSelected(true);
     createSubcomponent.setSelected(true);
 
@@ -76,7 +78,8 @@ public class GenerateRibDialog extends DialogWrapper {
         createKotlinCode.isSelected(),
         createSubcomponent.isSelected(),
         createLayout.isSelected(),
-        createViewAsync.isSelected());
+        createViewAsync.isSelected(),
+        useNavigation.isSelected());
   }
 
   /**
@@ -94,6 +97,6 @@ public class GenerateRibDialog extends DialogWrapper {
     void onGenerateClicked(
             String ribName, boolean createPresenterAndView,
             boolean isKotlinSelected, boolean isSubcomponent, boolean createLayout,
-            boolean createViewAsync);
+            boolean createViewAsync, boolean useNavigation);
   }
 }
