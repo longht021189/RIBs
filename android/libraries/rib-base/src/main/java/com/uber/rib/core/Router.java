@@ -110,7 +110,7 @@ public class Router<I extends com.uber.rib.core.Interactor> {
    * @param childRouter the {@link Router} to be attached.
    */
   @MainThread
-  protected void attachChild(Router<?> childRouter) {
+  public void attachChild(Router<?> childRouter) {
     attachChild(childRouter, childRouter.getClass().getName());
   }
 
@@ -155,7 +155,7 @@ public class Router<I extends com.uber.rib.core.Interactor> {
    * @param childRouter the {@link Router} to be detached.
    */
   @MainThread
-  protected void detachChild(Router childRouter) {
+  public void detachChild(Router childRouter) {
     children.remove(childRouter);
 
     Interactor interactor = childRouter.getInteractor();
