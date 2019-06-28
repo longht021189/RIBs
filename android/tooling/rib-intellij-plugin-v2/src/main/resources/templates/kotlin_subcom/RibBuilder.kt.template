@@ -4,7 +4,7 @@ import javax.inject.Inject
 import dagger.android.DispatchingAndroidInjector
 import com.uber.rib.core.IBuilder
 
-class ${rib_name}Builder : IBuilder {
+class ${rib_name}Builder : IBuilder<${rib_name}Router> {
 
     @Inject lateinit var router: ${rib_name}Router
 
