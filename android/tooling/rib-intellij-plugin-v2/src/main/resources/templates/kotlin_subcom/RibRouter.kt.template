@@ -1,7 +1,12 @@
 package ${package_name}
 
+import javax.inject.Inject
+import dagger.Lazy
+import com.uber.rib.core.Router
+import dagger.android.DispatchingAndroidInjector
+
 @${rib_name}Builder.${rib_name}Scope
-class ${rib_name}Router @javax.inject.Inject constructor(
+class ${rib_name}Router @Inject constructor(
     interactor: ${rib_name}Interactor,
-    private val injector: dagger.android.DispatchingAndroidInjector<Any>
-) : com.uber.rib.core.Router<${rib_name}Interactor>(interactor)
+    private val injector: Lazy<DispatchingAndroidInjector<Any>>
+) : Router<${rib_name}Interactor>(interactor)

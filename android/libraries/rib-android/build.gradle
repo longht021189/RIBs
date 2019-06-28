@@ -44,6 +44,8 @@ dependencies {
     api project(":libraries:rib-base")
     api deps.external.rxrelay2
     api deps.external.rxjava2
+    api deps.external.daggerSupport
+
     implementation deps.apt.javaxInject
     implementation deps.androidx.annotations
     implementation deps.androidx.appcompat

@@ -1,10 +1,14 @@
 package ${package_name}
 
-class ${rib_name}Builder {
+import javax.inject.Inject
+import dagger.android.DispatchingAndroidInjector
+import com.uber.rib.core.IBuilder
 
-    @javax.inject.Inject lateinit var router: ${rib_name}Router
+class ${rib_name}Builder : IBuilder {
 
-    fun build(injector: dagger.android.DispatchingAndroidInjector<Any>): ${rib_name}Router {
+    @Inject lateinit var router: ${rib_name}Router
+
+    override fun build(injector: DispatchingAndroidInjector<Any>): ${rib_name}Router {
         injector.inject(this)
         return router
     }

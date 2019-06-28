@@ -91,7 +91,7 @@ abstract class Navigation(
         }
 
         override fun add(path: Uri) {
-            if (path == uriStack.peek()) return
+            if (!uriStack.empty() && path == uriStack.peek()) return
 
             uriStack.push(path)
 
