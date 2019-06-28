@@ -14,7 +14,6 @@ class ${rib_name}Interactor @Inject constructor(
     private val navigation: Lazy<Navigation>
 ) : Interactor<${rib_name}Interactor.${rib_name}Presenter, ${rib_name}Router>(presenter, router), Node {
 
-    private val nodeName: String = "${rib_name_to_upper}"
     private val backStackName: String = TODO("backStackName, String HERE")
     private val nodeManager by lazy {
         navigation.get().getNodeManager(backStackName)
@@ -22,7 +21,7 @@ class ${rib_name}Interactor @Inject constructor(
 
     override fun didBecomeActive(savedInstanceState: Bundle?) {
         super.didBecomeActive(savedInstanceState)
-        nodeManager.addNode(nodeName, this)
+        nodeManager.addNode(NAME, this)
 
         // TODO: Add attachment logic here (RxSubscriptions, etc.).
     }
@@ -34,9 +33,13 @@ class ${rib_name}Interactor @Inject constructor(
     override fun willResignActive() {
         // TODO: Perform any required clean up here, or delete this method entirely if not needed.
 
-        nodeManager.removeNode(nodeName)
+        nodeManager.removeNode(NAME)
         super.willResignActive()
     }
 
     interface ${rib_name}Presenter
+
+    companion object {
+        const val NAME = "${rib_name_to_upper}"
+    }
 }
