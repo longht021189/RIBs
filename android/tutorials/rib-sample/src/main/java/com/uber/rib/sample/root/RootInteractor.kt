@@ -1,34 +1,39 @@
 package com.uber.rib.sample.root
 
-import com.uber.rib.sample.Navigation
+import com.uber.rib.core.Bundle
+import com.uber.rib.core.Interactor
+import com.uber.rib.core.navigation.Navigation
+import com.uber.rib.core.navigation.Node
+import dagger.Lazy
+import javax.inject.Inject
 
 @RootBuilder.RootScope
-class RootInteractor @javax.inject.Inject constructor(
-    presenter: dagger.Lazy<RootPresenter>,
-    router: dagger.Lazy<RootRouter>,
-    private val navigation: com.uber.rib.core.navigation.Navigation
-) : com.uber.rib.core.Interactor<RootInteractor.RootPresenter, RootRouter>(presenter, router),
-    com.uber.rib.core.navigation.Node {
+class RootInteractor @Inject constructor(
+    presenter: Lazy<RootPresenter>,
+    router: Lazy<RootRouter>,
+    private val navigation: Lazy<Navigation>
+) : Interactor<RootInteractor.RootPresenter, RootRouter>(presenter, router), Node {
 
-    private val nodeName = Navigation.NODE_ROOT
-    private val backStackName = Navigation.BACK_STACK_MAIN
+    private val nodeName: String = "ROOT"
+    private val backStackName: String = TODO("backStackName, String HERE")
     private val nodeManager by lazy {
-        navigation.getNodeManager(backStackName)
+        navigation.get().getNodeManager(backStackName)
     }
 
-    override fun didBecomeActive(savedInstanceState: com.uber.rib.core.Bundle?) {
+    override fun didBecomeActive(savedInstanceState: Bundle?) {
         super.didBecomeActive(savedInstanceState)
         nodeManager.addNode(nodeName, this)
+
+        // TODO: Add attachment logic here (RxSubscriptions, etc.).
     }
 
     override fun onNavigation(child: String?) {
-        when (child) {
-            Navigation.NODE_HOME -> router.routeToHome()
-            else -> router.routeToSplash()
-        }
+        // TODO: Update Child HERE
     }
 
     override fun willResignActive() {
+        // TODO: Perform any required clean up here, or delete this method entirely if not needed.
+
         nodeManager.removeNode(nodeName)
         super.willResignActive()
     }

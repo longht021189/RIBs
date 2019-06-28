@@ -1,50 +1,14 @@
 package com.uber.rib.sample.root
 
-import com.uber.rib.core.IViewRouter
 import com.uber.rib.core.Router
-import com.uber.rib.sample.home.HomeBuilder
-import com.uber.rib.sample.splash.SplashBuilder
+import com.uber.rib.core.ViewRouterSubcomponent
+import dagger.Lazy
+import javax.inject.Inject
+import javax.inject.Provider
 
 @RootBuilder.RootScope
-class RootRouter @javax.inject.Inject constructor(
+class RootRouter @Inject constructor(
     view: RootView,
     interactor: RootInteractor,
-    val injector: dagger.android.DispatchingAndroidInjector<Any>
-) : com.uber.rib.core.ViewRouterSubcomponent<RootView, RootInteractor>(view, interactor) {
-
-    private var router: Router<*>? = null
-
-    fun routeToSplash() {
-        this.router?.let {
-            detachChild(it)
-
-            if (it is IViewRouter<*>) {
-                view.removeView(it.view)
-            }
-        }
-
-        val router = SplashBuilder().build(injector)
-
-        attachChild(router)
-        view.addView(router.view)
-
-        this.router = router
-    }
-
-    fun routeToHome() {
-        this.router?.let {
-            detachChild(it)
-
-            if (it is IViewRouter<*>) {
-                view.removeView(it.view)
-            }
-        }
-
-        val router = HomeBuilder().build(injector)
-
-        attachChild(router)
-        view.addView(router.view)
-
-        this.router = router
-    }
-}
+    private val routersLazy: Lazy<Map<String, @JvmSuppressWildcards Provider<Router<*>>>>
+) : ViewRouterSubcomponent<RootView, RootInteractor>(view, interactor)

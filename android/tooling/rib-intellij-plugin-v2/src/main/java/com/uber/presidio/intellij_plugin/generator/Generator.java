@@ -43,6 +43,7 @@ public abstract class Generator {
   private static final String TEMPLATE_TOKEN_PACKAGE_NAME = "package_name";
   private static final String TEMPLATE_TOKEN_RIBLET_NAME = "rib_name";
   private static final String TEMPLATE_TOKEN_RIBLET_NAME_TO_LOWER = "rib_name_to_lower";
+  private static final String TEMPLATE_TOKEN_RIBLET_NAME_TO_UPPER = "rib_name_to_upper";
 
   private final String packageName;
   private final String ribName;
@@ -64,6 +65,7 @@ public abstract class Generator {
     templateValuesMap.put(TEMPLATE_TOKEN_PACKAGE_NAME, packageName);
     templateValuesMap.put(TEMPLATE_TOKEN_RIBLET_NAME, ribName);
     templateValuesMap.put(TEMPLATE_TOKEN_RIBLET_NAME_TO_LOWER, ribName.toLowerCase());
+    templateValuesMap.put(TEMPLATE_TOKEN_RIBLET_NAME_TO_UPPER, ribName.toUpperCase());
 
     try {
       String[] resources = getResourceListing(this.getClass(), "partials/");

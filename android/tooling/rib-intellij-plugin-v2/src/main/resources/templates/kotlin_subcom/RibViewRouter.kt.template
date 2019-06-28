@@ -1,13 +1,14 @@
 package ${package_name}
 
+import com.uber.rib.core.Router
 import javax.inject.Inject
 import dagger.Lazy
 import com.uber.rib.core.ViewRouterSubcomponent
-import dagger.android.DispatchingAndroidInjector
+import javax.inject.Provider
 
 @${rib_name}Builder.${rib_name}Scope
 class ${rib_name}Router @Inject constructor(
     view: ${rib_name}View,
     interactor: ${rib_name}Interactor,
-    private val injector: Lazy<DispatchingAndroidInjector<Any>>
+    private val routersLazy: Lazy<Map<String, @JvmSuppressWildcards Provider<Router<*>>>>
 ) : ViewRouterSubcomponent<${rib_name}View, ${rib_name}Interactor>(view, interactor)

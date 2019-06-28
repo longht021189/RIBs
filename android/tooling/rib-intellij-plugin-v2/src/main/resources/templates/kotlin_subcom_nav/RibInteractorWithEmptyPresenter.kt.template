@@ -14,7 +14,7 @@ class ${rib_name}Interactor @Inject constructor(
     private val navigation: Lazy<Navigation>
 ) : Interactor<${rib_name}Builder.${rib_name}Presenter, ${rib_name}Router>(presenter, router), Node {
 
-    private val nodeName: String = TODO("nodeName, String HERE")
+    private val nodeName: String = "${rib_name_to_upper}"
     private val backStackName: String = TODO("backStackName, String HERE")
     private val nodeManager by lazy {
         navigation.get().getNodeManager(backStackName)

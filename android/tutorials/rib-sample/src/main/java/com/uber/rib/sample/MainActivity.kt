@@ -1,38 +1,25 @@
 package com.uber.rib.sample
 
-import android.os.Bundle
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.uber.rib.core.IViewRouter
 import com.uber.rib.core.RibActivity
-import com.uber.rib.sample.dialog.MyDialog
-import com.uber.rib.sample.root.RootBuilder
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
+import com.uber.rib.core.Router
 import javax.inject.Inject
+import javax.inject.Provider
 
-class MainActivity : RibActivity(), HasSupportFragmentInjector {
-
-    @Inject
-    lateinit var injector: DispatchingAndroidInjector<Any>
-
-    @Inject
-    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
+class MainActivity : RibActivity() {
 
     @Inject
     lateinit var navigation: Navigation
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        MyDialog().show(supportFragmentManager, "DIALOG")
-    }
+    @Inject
+    lateinit var map: Map<String, @JvmSuppressWildcards Provider<Router<*>>>
 
     override fun createRouter(parentViewGroup: ViewGroup?): IViewRouter<*> {
         DaggerMainActivityComponent
             .factory().create(this).inject(this)
 
-        return RootBuilder().build(injector)
+        return map["ROOT"]?.get() as IViewRouter<*>
     }
 
     override fun onBackPressed() {
@@ -41,9 +28,5 @@ class MainActivity : RibActivity(), HasSupportFragmentInjector {
         }
 
         super.onBackPressed()
-    }
-
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> {
-        return fragmentInjector
     }
 }

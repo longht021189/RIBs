@@ -2,23 +2,34 @@ package ${package_name}
 
 import javax.inject.Inject
 import dagger.android.DispatchingAndroidInjector
-import com.uber.rib.core.IBuilder
+import dagger.multibindings.StringKey
+import dagger.Provides
+import dagger.multibindings.IntoMap
 
-class ${rib_name}Builder : IBuilder<${rib_name}Router> {
+class ${rib_name}Builder private constructor(injector: DispatchingAndroidInjector<Any>) {
 
-    @Inject lateinit var router: ${rib_name}Router
+    @Inject internal lateinit var router: ${rib_name}Router
 
-    override fun build(injector: DispatchingAndroidInjector<Any>): ${rib_name}Router {
+    init {
         injector.inject(this)
-        return router
     }
 
     @dagger.Module
-    interface ParentModule {
+    abstract class ParentModule {
 
         @${rib_name}Scope
         @dagger.android.ContributesAndroidInjector(modules = [Module::class])
-        fun contribute${rib_name}BuilderInjector(): ${rib_name}Builder
+        abstract fun contribute${rib_name}BuilderInjector(): ${rib_name}Builder
+
+        @dagger.Module
+        companion object {
+
+            @JvmStatic @Provides
+            @StringKey("${rib_name_to_upper}") @IntoMap
+            fun provide${rib_name}Builder(injector: DispatchingAndroidInjector<Any>): Router<*> {
+                return ${rib_name}Builder(injector).router
+            }
+        }
     }
 
     @dagger.Module

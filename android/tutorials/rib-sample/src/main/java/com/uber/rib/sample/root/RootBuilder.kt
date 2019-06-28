@@ -1,27 +1,36 @@
 package com.uber.rib.sample.root
 
-import com.uber.rib.sample.MainActivity
-import com.uber.rib.sample.home.HomeBuilder
-import com.uber.rib.sample.splash.SplashBuilder
+import com.uber.rib.core.Router
+import dagger.Provides
+import dagger.android.DispatchingAndroidInjector
+import dagger.multibindings.IntoMap
+import dagger.multibindings.StringKey
+import javax.inject.Inject
 
-class RootBuilder {
+class RootBuilder private constructor(injector: DispatchingAndroidInjector<Any>) {
 
-    @javax.inject.Inject lateinit var router: RootRouter
+    @Inject internal lateinit var router: RootRouter
 
-    fun build(injector: dagger.android.DispatchingAndroidInjector<Any>): RootRouter {
+    init {
         injector.inject(this)
-        return router
     }
 
     @dagger.Module
-    interface ParentModule {
+    abstract class  ParentModule {
 
         @RootScope
-        @dagger.android.ContributesAndroidInjector(modules = [
-            Module::class, SplashBuilder.ParentModule::class,
-            HomeBuilder.ParentModule::class
-        ])
-        fun contributeRootBuilderInjector(): RootBuilder
+        @dagger.android.ContributesAndroidInjector(modules = [Module::class])
+        abstract fun contributeRootBuilderInjector(): RootBuilder
+
+        @dagger.Module
+        companion object {
+
+            @JvmStatic @Provides
+            @StringKey("ROOT") @IntoMap
+            fun provideRootBuilder(injector: DispatchingAndroidInjector<Any>): Router<*> {
+                return RootBuilder(injector).router
+            }
+        }
     }
 
     @dagger.Module
@@ -37,10 +46,12 @@ class RootBuilder {
             @RootScope
             @dagger.Provides
             @JvmStatic
-            internal fun inflateRootView(activity: MainActivity): RootView {
-                return RootView(activity)
+            internal fun inflateRootView(): RootView {
+                TODO("Inflate a new view using the provided inflater, or create a new view programatically using the provided context from the parentViewGroup.")
             }
         }
+
+        // TODO: Create provider methods for dependencies created by this Rib. These should be static.
     }
 
     @javax.inject.Scope
