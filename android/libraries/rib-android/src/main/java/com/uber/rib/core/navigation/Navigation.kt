@@ -28,7 +28,7 @@ abstract class Navigation(
             throw IllegalArgumentException("Back Stack $backStackName Is Exists.")
         }
 
-        managerMap[backStackName] = Manager(defaultUri)
+        managerMap[backStackName] = Manager(defaultUri, backStackName)
     }
 
     fun getNodeManager(backStackName: String): NodeManager {
@@ -54,6 +54,14 @@ abstract class Navigation(
         return false
     }
 
+    open fun onAdd(manager: IManager, path: Uri) {
+        manager.add(path)
+    }
+
+    open fun onReplace(manager: IManager, path: Uri, removeDepth: Int) {
+        manager.replace(path, removeDepth)
+    }
+
     override fun close() {
         if (isClosed) return
         isClosed = true
@@ -62,12 +70,28 @@ abstract class Navigation(
         managerMap.clear()
     }
 
-    private inner class Manager(defaultUri: Uri) : NodeManager, Closeable {
+    private inner class Manager(
+        defaultUri: Uri,
+        private val backStackName: String
+    ) : NodeManager, Closeable {
 
         private val uriStack by lazy {
             val stack = Stack<Uri>()
             stack.push(defaultUri)
             stack
+        }
+        private val iManager by lazy {
+            object : IManager {
+                override val backStackName: String get() {
+                    return this@Manager.backStackName
+                }
+                override fun add(path: Uri) {
+                    internalAdd(path)
+                }
+                override fun replace(path: Uri, removeDepth: Int) {
+                    internalReplace(path, removeDepth)
+                }
+            }
         }
 
         private fun onRefresh() {
@@ -90,7 +114,7 @@ abstract class Navigation(
             node?.onNavigation(child)
         }
 
-        override fun add(path: Uri) {
+        private fun internalAdd(path: Uri) {
             if (!uriStack.empty() && path == uriStack.peek()) return
 
             uriStack.push(path)
@@ -98,7 +122,7 @@ abstract class Navigation(
             onRefresh()
         }
 
-        override fun replace(path: Uri, removeDepth: Int) {
+        private fun internalReplace(path: Uri, removeDepth: Int) {
             var depth = removeDepth
 
             while (!uriStack.empty() && depth != 0) {
@@ -106,7 +130,15 @@ abstract class Navigation(
                 depth--
             }
 
-            add(path)
+            internalAdd(path)
+        }
+
+        override fun add(path: Uri) {
+            onAdd(iManager, path)
+        }
+
+        override fun replace(path: Uri, removeDepth: Int) {
+            onReplace(iManager, path, removeDepth)
         }
 
         override fun addNode(name: String, node: Node) {
@@ -138,6 +170,13 @@ abstract class Navigation(
         }
 
         override fun close() {}
+    }
+
+    interface IManager {
+        val backStackName: String
+
+        fun add(path: Uri)
+        fun replace(path: Uri, removeDepth: Int)
     }
 
     companion object {

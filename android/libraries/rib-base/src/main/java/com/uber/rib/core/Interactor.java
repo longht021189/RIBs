@@ -38,6 +38,8 @@ import io.reactivex.functions.Function;
 import static com.uber.rib.core.lifecycle.InteractorEvent.ACTIVE;
 import static com.uber.rib.core.lifecycle.InteractorEvent.INACTIVE;
 
+import com.uber.rib.core.navigation.Node;
+
 /**
  * The base implementation for all {@link Interactor}s.
  *
@@ -45,7 +47,7 @@ import static com.uber.rib.core.lifecycle.InteractorEvent.INACTIVE;
  * @param <R> the type of {@link Router}.
  */
 public abstract class Interactor<P, R extends Router>
-    implements LifecycleScopeProvider<InteractorEvent> {
+    implements LifecycleScopeProvider<InteractorEvent>, Node {
 
   private static final CorrespondingEventsFunction<InteractorEvent> LIFECYCLE_MAP_FUNCTION =
       interactorEvent -> {
@@ -168,5 +170,10 @@ public abstract class Interactor<P, R extends Router>
   @Override
   public final CompletableSource requestScope() {
     return LifecycleScopes.resolveScopeFromLifecycle(this);
+  }
+
+  @Override
+  public void onNavigation(@Nullable String child) {
+
   }
 }
