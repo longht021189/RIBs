@@ -22,7 +22,8 @@ public class ViewRouterTestGenerator extends Generator {
   private static final String TEMPLATE_NAME = "RibViewRouterTest";
 
   public ViewRouterTestGenerator(String packageName, String ribName, boolean isKotlinSelected, boolean isSubcomponent) {
-    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME, isSubcomponent, false);
+    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME,
+            isSubcomponent, false, false, false);
   }
 
   @Override

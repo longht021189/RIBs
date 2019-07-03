@@ -34,6 +34,9 @@ public class GenerateRibDialog extends DialogWrapper {
   private JCheckBox createLayout;
   private JCheckBox createViewAsync;
   private JCheckBox useNavigation;
+  private JCheckBox useQualifier;
+  private JRadioButton useQualifierView;
+  private JRadioButton useQualifierViewGroup;
 
   public GenerateRibDialog(final Listener listener) {
     super(null);
@@ -60,6 +63,30 @@ public class GenerateRibDialog extends DialogWrapper {
 
     createLayout.setEnabled(false);
     createViewAsync.setEnabled(false);
+
+    useQualifier.setSelected(true);
+    useQualifierView.setSelected(true);
+    useQualifierViewGroup.setSelected(false);
+
+    useQualifier.addActionListener(actionEvent -> {
+      if (useQualifier.isSelected()) {
+        useQualifierView.setEnabled(true);
+        useQualifierViewGroup.setEnabled(true);
+      } else {
+        useQualifierView.setEnabled(false);
+        useQualifierViewGroup.setEnabled(false);
+      }
+    });
+    useQualifierView.addActionListener(actionEvent -> {
+      if (useQualifierView.isSelected()) {
+        useQualifierViewGroup.setSelected(false);
+      }
+    });
+    useQualifierViewGroup.addActionListener(actionEvent -> {
+      if (useQualifierViewGroup.isSelected()) {
+        useQualifierView.setSelected(false);
+      }
+    });
   }
 
   @Nullable
@@ -79,7 +106,9 @@ public class GenerateRibDialog extends DialogWrapper {
         createSubcomponent.isSelected(),
         createLayout.isSelected(),
         createViewAsync.isSelected(),
-        useNavigation.isSelected());
+        useNavigation.isSelected(),
+            useQualifierView.isEnabled() && useQualifierView.isSelected(),
+            useQualifierViewGroup.isEnabled() && useQualifierViewGroup.isSelected());
   }
 
   /**
@@ -97,6 +126,7 @@ public class GenerateRibDialog extends DialogWrapper {
     void onGenerateClicked(
             String ribName, boolean createPresenterAndView,
             boolean isKotlinSelected, boolean isSubcomponent, boolean createLayout,
-            boolean createViewAsync, boolean useNavigation);
+            boolean createViewAsync, boolean useNavigation, boolean useQualifierView,
+            boolean useQualifierViewGroup);
   }
 }

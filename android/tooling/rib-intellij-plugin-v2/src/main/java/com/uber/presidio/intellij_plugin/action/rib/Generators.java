@@ -34,7 +34,8 @@ public final class Generators {
    */
   public static GeneratorPair getGeneratorsForRibWithPresenterAndView(
       String packageName, String ribName, boolean isKotlinSelected, boolean isSubcomponent,
-      boolean createLayout, boolean createViewAsync, boolean useNavigation) {
+      boolean createLayout, boolean createViewAsync, boolean useNavigation,
+      boolean useQualifierView, boolean useQualifierViewGroup) {
 
     if (isSubcomponent && !isKotlinSelected) {
       throw new RuntimeException("Java Subcomponent is not Supported yet.");
@@ -45,9 +46,9 @@ public final class Generators {
 
     InteractorWithPresenterGenerator interactorGenerator =
         new InteractorWithPresenterGenerator(packageName, ribName, isKotlinSelected, isSubcomponent, useNavigation);
-    ViewBuilderGenerator viewBuilderGenerator = new ViewBuilderGenerator(packageName, ribName, isKotlinSelected, isSubcomponent);
+    ViewBuilderGenerator viewBuilderGenerator = new ViewBuilderGenerator(packageName, ribName, isKotlinSelected, isSubcomponent, useQualifierView, useQualifierViewGroup);
     ViewGenerator viewGenerator = new ViewGenerator(packageName, ribName, isKotlinSelected, isSubcomponent);
-    ViewRouterGenerator viewRouterGenerator = new ViewRouterGenerator(packageName, ribName, isKotlinSelected, isSubcomponent);
+    ViewRouterGenerator viewRouterGenerator = new ViewRouterGenerator(packageName, ribName, isKotlinSelected, isSubcomponent, useQualifierView, useQualifierViewGroup);
 
     // TODO Subcomponent Packet is not Support Test yet
     if (isSubcomponent) {

@@ -33,11 +33,15 @@ public class GenerateRibAction extends GenerateAction implements GenerateRibDial
   @Override
   public void onGenerateClicked(String ribName, boolean createPresenterAndView,
                                 boolean isKotlinSelected, boolean isSubcomponent, boolean createLayout,
-                                boolean createViewAsync, boolean useNavigation) {
+                                boolean createViewAsync, boolean useNavigation, boolean useQualifierView,
+                                boolean useQualifierViewGroup) {
     final GeneratorPair generators =
             createPresenterAndView
-                    ? Generators.getGeneratorsForRibWithPresenterAndView(getPackageName(), ribName, isKotlinSelected, isSubcomponent, createLayout, createViewAsync, useNavigation)
-                    : Generators.getGeneratorsForRibWithoutPresenterAndView(getPackageName(), ribName, isKotlinSelected, isSubcomponent, useNavigation);
+                    ? Generators.getGeneratorsForRibWithPresenterAndView(getPackageName(), ribName,
+                    isKotlinSelected, isSubcomponent, createLayout, createViewAsync, useNavigation,
+                    useQualifierView, useQualifierViewGroup)
+                    : Generators.getGeneratorsForRibWithoutPresenterAndView(getPackageName(), ribName,
+                    isKotlinSelected, isSubcomponent, useNavigation);
     generate(generators.getMainSourceSetGenerators(), generators.getTestSourceSetGenerators());
   }
 }
