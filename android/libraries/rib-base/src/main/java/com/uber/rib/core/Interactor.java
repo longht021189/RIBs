@@ -30,6 +30,7 @@ import com.uber.rib.core.lifecycle.InteractorEvent;
 import dagger.Lazy;
 
 import javax.inject.Inject;
+import java.util.Map;
 
 import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
@@ -173,7 +174,7 @@ public abstract class Interactor<P, R extends Router>
   }
 
   @Override
-  public void onNavigation(@Nullable String child) {
+  public void onNavigation(@Nullable String child, @Nullable Map<String, String> input) {
 
   }
 }

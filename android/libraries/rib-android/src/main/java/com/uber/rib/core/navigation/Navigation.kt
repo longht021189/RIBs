@@ -111,7 +111,22 @@ abstract class Navigation(
                 }
             }
 
-            node?.onNavigation(child)
+            val input = if (child == null) {
+                val names = path.queryParameterNames
+                if (names.size > 0) {
+                    ArrayMap<String, String>().apply {
+                        names.forEach {
+                            put(it, path.getQueryParameter(it)!!)
+                        }
+                    }
+                } else {
+                    null
+                }
+            } else {
+                null
+            }
+
+            node?.onNavigation(child, input)
         }
 
         private fun internalAdd(path: Uri) {
@@ -147,10 +162,26 @@ abstract class Navigation(
             lruCache.put(name, node)
             nodeMap[name] = WeakReference(node)
 
-            val pathSegments = uriStack.peek().pathSegments
+            val path = uriStack.peek()
+            val pathSegments = path.pathSegments
             val index = pathSegments.indexOf(name)
+            val child = if (index < pathSegments.size - 1) { pathSegments[index + 1] } else { null }
+            val input = if (child == null) {
+                val names = path.queryParameterNames
+                if (names.size > 0) {
+                    ArrayMap<String, String>().apply {
+                        names.forEach {
+                            put(it, path.getQueryParameter(it)!!)
+                        }
+                    }
+                } else {
+                    null
+                }
+            } else {
+                null
+            }
 
-            node.onNavigation(if (index < pathSegments.size - 1) { pathSegments[index + 1] } else { null })
+            node.onNavigation(child, input)
         }
 
         override fun removeNode(name: String) {
