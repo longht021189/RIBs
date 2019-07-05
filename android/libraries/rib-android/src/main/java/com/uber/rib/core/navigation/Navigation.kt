@@ -189,7 +189,7 @@ abstract class Navigation(
             nodeMap.remove(name)
         }
 
-        fun onBackPressed(): Boolean {
+        override fun onBackPressed(): Boolean {
             if (uriStack.size <= 1) {
                 return false
             }
