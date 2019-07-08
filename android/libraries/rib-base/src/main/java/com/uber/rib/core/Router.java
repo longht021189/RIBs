@@ -211,7 +211,7 @@ public class Router<I extends com.uber.rib.core.Interactor> {
    *
    * @return Children.
    */
-  List<Router> getChildren() {
+  public List<Router> getChildren() {
     return children;
   }
 
