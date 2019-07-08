@@ -9,7 +9,7 @@ import com.uber.rib.core.navigation.Navigation as Base
 class Navigation @Inject constructor(): Base() {
 
     init {
-        createBackStack(BACK_STACK_MAIN, SCREEN_SPLASH)
+        createBackStack(BACK_STACK_MAIN, SCREEN_SPLASH, null)
     }
 
     companion object {

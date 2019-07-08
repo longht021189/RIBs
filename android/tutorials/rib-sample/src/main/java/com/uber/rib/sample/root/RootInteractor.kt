@@ -12,7 +12,7 @@ class RootInteractor @Inject constructor(
     presenter: Lazy<RootPresenter>,
     router: Lazy<RootRouter>,
     private val navigation: Lazy<Navigation>
-) : Interactor<RootInteractor.RootPresenter, RootRouter>(presenter, router), Node {
+) : Interactor<RootInteractor.RootPresenter, RootRouter>(presenter, router) {
 
     private val nodeName: String = "ROOT"
     private val backStackName: String = TODO("backStackName, String HERE")
@@ -25,10 +25,6 @@ class RootInteractor @Inject constructor(
         nodeManager.addNode(nodeName, this)
 
         // TODO: Add attachment logic here (RxSubscriptions, etc.).
-    }
-
-    override fun onNavigation(child: String?) {
-        // TODO: Update Child HERE
     }
 
     override fun willResignActive() {

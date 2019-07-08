@@ -22,13 +22,13 @@ abstract class Navigation(
         ArrayMap<String, Manager>()
     }
 
-    protected fun createBackStack(backStackName: String, defaultUri: Uri) {
+    protected fun createBackStack(backStackName: String, defaultUri: Uri, defaultData: Any?) {
         if (isClosed) return
         if (managerMap.contains(backStackName)) {
             throw IllegalArgumentException("Back Stack $backStackName Is Exists.")
         }
 
-        managerMap[backStackName] = Manager(defaultUri, backStackName)
+        managerMap[backStackName] = Manager(defaultUri, defaultData, backStackName)
     }
 
     fun getNodeManager(backStackName: String): NodeManager {
@@ -54,12 +54,12 @@ abstract class Navigation(
         return false
     }
 
-    open fun onAdd(manager: IManager, path: Uri) {
-        manager.add(path)
+    open fun onAdd(manager: IManager, path: Uri, data: Any?) {
+        manager.add(path, data)
     }
 
-    open fun onReplace(manager: IManager, path: Uri, removeDepth: Int) {
-        manager.replace(path, removeDepth)
+    open fun onReplace(manager: IManager, path: Uri, removeDepth: Int, data: Any?) {
+        manager.replace(path, removeDepth, data)
     }
 
     override fun close() {
@@ -70,14 +70,38 @@ abstract class Navigation(
         managerMap.clear()
     }
 
+    private class UriInfo(
+        val value: Uri,
+        var data: Any?
+    ) {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as UriInfo
+
+            if (value != other.value) return false
+            if (data != other.data) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = value.hashCode()
+            result = 31 * result + data.hashCode()
+            return result
+        }
+    }
+
     private inner class Manager(
         defaultUri: Uri,
+        defaultData: Any?,
         private val backStackName: String
     ) : NodeManager, Closeable {
 
         private val uriStack by lazy {
-            val stack = Stack<Uri>()
-            stack.push(defaultUri)
+            val stack = Stack<UriInfo>()
+            stack.push(UriInfo(defaultUri, defaultData))
             stack
         }
         private val iManager by lazy {
@@ -85,11 +109,11 @@ abstract class Navigation(
                 override val backStackName: String get() {
                     return this@Manager.backStackName
                 }
-                override fun add(path: Uri) {
-                    internalAdd(path)
+                override fun add(path: Uri, data: Any?) {
+                    internalAdd(path, data)
                 }
-                override fun replace(path: Uri, removeDepth: Int) {
-                    internalReplace(path, removeDepth)
+                override fun replace(path: Uri, removeDepth: Int, data: Any?) {
+                    internalReplace(path, removeDepth, data)
                 }
             }
         }
@@ -100,7 +124,7 @@ abstract class Navigation(
             var node: Node? = null
 
             run onNavigation@ {
-                path.pathSegments.forEach { name ->
+                path.value.pathSegments.forEach { name ->
                     val n = getNode(name)
                     if (n != null) {
                         node = n
@@ -112,16 +136,7 @@ abstract class Navigation(
             }
 
             val input = if (child == null) {
-                val names = path.queryParameterNames
-                if (names.size > 0) {
-                    ArrayMap<String, String>().apply {
-                        names.forEach {
-                            put(it, path.getQueryParameter(it)!!)
-                        }
-                    }
-                } else {
-                    null
-                }
+                path.data
             } else {
                 null
             }
@@ -129,15 +144,21 @@ abstract class Navigation(
             node?.onNavigation(child, input)
         }
 
-        private fun internalAdd(path: Uri) {
-            if (!uriStack.empty() && path == uriStack.peek()) return
+        private fun internalAdd(path: Uri, data: Any?) {
+            if (!uriStack.empty() && path == uriStack.peek().value) return
 
-            uriStack.push(path)
+            uriStack.peek().apply saveState@ {
+                val name = value.pathSegments.last()
+                val node = nodeMap[name]?.get()
+
+                this.data = node?.onEnterBackStack(data)
+            }
+            uriStack.push(UriInfo(path, data))
 
             onRefresh()
         }
 
-        private fun internalReplace(path: Uri, removeDepth: Int) {
+        private fun internalReplace(path: Uri, removeDepth: Int, data: Any?) {
             var depth = removeDepth
 
             while (!uriStack.empty() && depth != 0) {
@@ -145,15 +166,15 @@ abstract class Navigation(
                 depth--
             }
 
-            internalAdd(path)
+            internalAdd(path, data)
         }
 
-        override fun add(path: Uri) {
-            onAdd(iManager, path)
+        override fun add(path: Uri, data: Any?) {
+            onAdd(iManager, path, data)
         }
 
-        override fun replace(path: Uri, removeDepth: Int) {
-            onReplace(iManager, path, removeDepth)
+        override fun replace(path: Uri, data: Any?, removeDepth: Int) {
+            onReplace(iManager, path, removeDepth, data)
         }
 
         override fun addNode(name: String, node: Node) {
@@ -163,20 +184,11 @@ abstract class Navigation(
             nodeMap[name] = WeakReference(node)
 
             val path = uriStack.peek()
-            val pathSegments = path.pathSegments
+            val pathSegments = path.value.pathSegments
             val index = pathSegments.indexOf(name)
             val child = if (index < pathSegments.size - 1) { pathSegments[index + 1] } else { null }
             val input = if (child == null) {
-                val names = path.queryParameterNames
-                if (names.size > 0) {
-                    ArrayMap<String, String>().apply {
-                        names.forEach {
-                            put(it, path.getQueryParameter(it)!!)
-                        }
-                    }
-                } else {
-                    null
-                }
+                path.data
             } else {
                 null
             }
@@ -206,8 +218,8 @@ abstract class Navigation(
     interface IManager {
         val backStackName: String
 
-        fun add(path: Uri)
-        fun replace(path: Uri, removeDepth: Int)
+        fun add(path: Uri, data: Any?)
+        fun replace(path: Uri, removeDepth: Int, data: Any?)
     }
 
     companion object {

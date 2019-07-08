@@ -4,5 +4,6 @@ import androidx.annotation.Nullable;
 import java.util.Map;
 
 public interface Node {
-    void onNavigation(@Nullable String child, @Nullable Map<String, String> input);
+    void onNavigation(@Nullable String child, @Nullable Object data);
+    @Nullable Object onEnterBackStack(@Nullable Object data);
 }

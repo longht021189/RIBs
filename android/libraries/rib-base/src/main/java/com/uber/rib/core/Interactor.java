@@ -174,7 +174,13 @@ public abstract class Interactor<P, R extends Router>
   }
 
   @Override
-  public void onNavigation(@Nullable String child, @Nullable Map<String, String> input) {
+  public void onNavigation(@Nullable String child, @Nullable Object data) {
 
+  }
+
+  @Nullable
+  @Override
+  public Object onEnterBackStack(@Nullable Object data) {
+    return data;
   }
 }
