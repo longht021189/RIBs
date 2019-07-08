@@ -131,7 +131,7 @@ abstract class RibDialogFragment : DialogFragment(), ActivityStarter,
         lifecycleRelay.accept(ActivityLifecycleEvent
             .create(ActivityLifecycleEvent.Type.DESTROY))
 
-        router?.dispatchDetach()
+        router?.dispatchDetach()?.subscribe()
         router = null
 
         super.onDestroyView()

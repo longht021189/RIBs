@@ -210,7 +210,7 @@ public abstract class RibActivity extends AppCompatActivity
       lifecycleRelay.accept(ActivityLifecycleEvent.create(ActivityLifecycleEvent.Type.DESTROY));
     }
     if (router != null) {
-      router.dispatchDetach();
+      router.dispatchDetach().subscribe();
     }
     router = null;
     super.onDestroy();

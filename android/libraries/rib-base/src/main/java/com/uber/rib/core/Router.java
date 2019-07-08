@@ -20,7 +20,9 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import io.reactivex.Observable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -155,7 +157,16 @@ public class Router<I extends com.uber.rib.core.Interactor> {
    * @param childRouter the {@link Router} to be detached.
    */
   @MainThread
-  public void detachChild(Router childRouter) {
+  public Observable<Object> detachChild(Router childRouter) {
+    Observable<Boolean> internal = Observable.fromCallable(() -> {
+      internalDetachChild(childRouter);
+      return Boolean.TRUE;
+    });
+
+    return internal.flatMap((ignore) -> childRouter.dispatchDetach());
+  }
+
+  private void internalDetachChild(Router childRouter) {
     children.remove(childRouter);
 
     Interactor interactor = childRouter.getInteractor();
@@ -167,8 +178,6 @@ public class Router<I extends com.uber.rib.core.Interactor> {
           checkNotNull(savedInstanceState.getBundleExtra(KEY_CHILD_ROUTERS));
       childrenBundles.putBundleExtra(childRouter.tag, null);
     }
-
-    childRouter.dispatchDetach();
   }
 
   @CallSuper
@@ -195,15 +204,19 @@ public class Router<I extends com.uber.rib.core.Interactor> {
     getInteractor().dispatchAttach(interactorBundle);
   }
 
-  protected void dispatchDetach() {
+  public Observable<Object> dispatchDetach() {
     checkForMainThread();
 
     getInteractor().dispatchDetach();
     willDetach();
 
+    ArrayList<Observable<Object>> list = new ArrayList<>();
+
     for (Router child : children) {
-      detachChild(child);
+      list.add(detachChild(child));
     }
+
+    return Observable.merge(list).takeLast(1);
   }
 
   /**

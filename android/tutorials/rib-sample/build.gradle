@@ -46,9 +46,6 @@ dependencies {
     implementation (project(':libraries:rib-uava')) {
         exclude group: 'com.google.guava', module: 'guava'
     }
-    implementation (project(':libraries:rib-router-navigator')) {
-        exclude group: 'com.google.guava', module: 'guava'
-    }
     implementation (deps.androidx.appcompat) {
         exclude group: 'com.google.guava', module: 'guava'
     }

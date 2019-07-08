@@ -1,10 +1,11 @@
 package com.uber.rib.core;
 
 import android.view.View;
+import io.reactivex.Observable;
 
 public interface IViewRouter<V extends View> {
     V getView();
-    void dispatchDetach();
+    Observable<Object> dispatchDetach();
     boolean handleBackPress();
     Interactor getInteractor();
     void saveInstanceState(Bundle bundle);

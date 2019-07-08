@@ -42,11 +42,6 @@ public abstract class ViewRouter<
   }
 
   @Override
-  public void dispatchDetach() {
-    super.dispatchDetach();
-  }
-
-  @Override
   public void saveInstanceState(Bundle bundle) {
     super.saveInstanceState(bundle);
   }
