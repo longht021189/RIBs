@@ -1,6 +1,10 @@
 package com.uber.rib.sample.root
 
+import android.view.ViewGroup
 import com.uber.rib.core.Router
+import com.uber.rib.sample.MainActivity
+import com.uber.rib.sample.root.home.HomeBuilder
+import com.uber.rib.sample.root.splash.SplashBuilder
 import dagger.Provides
 import dagger.android.DispatchingAndroidInjector
 import dagger.multibindings.IntoMap
@@ -16,10 +20,14 @@ class RootBuilder private constructor(injector: DispatchingAndroidInjector<Any>)
     }
 
     @dagger.Module
-    abstract class  ParentModule {
+    abstract class ParentModule {
 
         @RootScope
-        @dagger.android.ContributesAndroidInjector(modules = [Module::class])
+        @dagger.android.ContributesAndroidInjector(modules = [
+            HomeBuilder.ParentModule::class,
+            SplashBuilder.ParentModule::class,
+            Module::class
+        ])
         abstract fun contributeRootBuilderInjector(): RootBuilder
 
         @dagger.Module
@@ -40,21 +48,28 @@ class RootBuilder private constructor(injector: DispatchingAndroidInjector<Any>)
         @dagger.Binds
         internal abstract fun presenter(view: RootView): RootInteractor.RootPresenter
 
+        @RootScope
+        @RootQualifier
+        @dagger.Binds
+        internal abstract fun bindRootViewGroup(view: RootView): ViewGroup
+
         @dagger.Module
         companion object {
 
             @RootScope
             @dagger.Provides
             @JvmStatic
-            internal fun inflateRootView(): RootView {
-                TODO("Inflate a new view using the provided inflater, or create a new view programatically using the provided context from the parentViewGroup.")
+            internal fun inflateRootView(activity: MainActivity): RootView {
+                return RootView(activity)
             }
         }
-
-        // TODO: Create provider methods for dependencies created by this Rib. These should be static.
     }
 
     @javax.inject.Scope
     @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
     internal annotation class RootScope
+
+    @javax.inject.Qualifier
+    @kotlin.annotation.Retention(AnnotationRetention.BINARY)
+    internal annotation class RootQualifier
 }

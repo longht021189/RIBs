@@ -21,13 +21,14 @@ import androidx.annotation.MainThread;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.reactivex.Observable;
+import io.reactivex.annotations.CheckReturnValue;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.uber.rib.core.Preconditions.*;
+import static com.uber.rib.core.Preconditions.checkNotNull;
 
 /**
  * Responsible for handling the addition and removal of children routers.
@@ -157,6 +158,7 @@ public class Router<I extends com.uber.rib.core.Interactor> {
    * @param childRouter the {@link Router} to be detached.
    */
   @MainThread
+  @CheckReturnValue
   public Observable<Object> detachChild(Router childRouter) {
     Observable<Boolean> internal = Observable.fromCallable(() -> {
       internalDetachChild(childRouter);
@@ -204,6 +206,7 @@ public class Router<I extends com.uber.rib.core.Interactor> {
     getInteractor().dispatchAttach(interactorBundle);
   }
 
+  @CheckReturnValue
   public Observable<Object> dispatchDetach() {
     checkForMainThread();
 

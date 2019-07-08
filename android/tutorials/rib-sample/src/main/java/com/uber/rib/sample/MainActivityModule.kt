@@ -1,15 +1,14 @@
 package com.uber.rib.sample
 
+import com.uber.rib.core.navigation.Navigation
 import com.uber.rib.sample.root.RootBuilder
+import com.uber.rib.sample.scope.ActivityScope
 import dagger.Binds
 import dagger.Module
-import javax.inject.Singleton
-import com.uber.rib.core.navigation.Navigation as Base
 
 @Module(includes = [RootBuilder.ParentModule::class])
 abstract class MainActivityModule {
 
-    @Binds
-    @Singleton
-    abstract fun bindNavigation(navigation: Navigation): Base
+    @Binds @ActivityScope
+    abstract fun bindNavigation(navigation: NavigationUtil): Navigation
 }
