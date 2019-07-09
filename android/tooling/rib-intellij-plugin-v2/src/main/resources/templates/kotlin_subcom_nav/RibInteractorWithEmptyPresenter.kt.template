@@ -15,6 +15,10 @@ class ${rib_name}Interactor @Inject constructor(
     presenter, router, navigation, TODO("Back Stack Name Here"), NAME
 ) {
     override fun didBecomeActive(savedInstanceState: Bundle?, child: String?, data: Any?) {
+        // TODO: Load input here
+    }
+
+    override fun didBecomeActive() {
         // TODO: Add attachment logic here (RxSubscriptions, etc.).
     }
 

@@ -30,6 +30,8 @@ public abstract class NavigationInteractor<P, R extends Router> extends Interact
     @Nullable
     private NodeManager nodeManager;
 
+    private boolean isResignActive = true;
+
     public NavigationInteractor(
             @NonNull Lazy<P> presenter,
             @NonNull Lazy<R> router,
@@ -78,8 +80,14 @@ public abstract class NavigationInteractor<P, R extends Router> extends Interact
                         (op1, navData) -> new Data(navData, op1.orNull())))
                 .subscribe((d) -> {
                     Data data = (Data) d;
+
                     didBecomeActive(data.savedInstanceState,
                             data.navData.child, data.navData.data);
+
+                    if (isResignActive) {
+                        isResignActive = false;
+                        didBecomeActive();
+                    }
                 });
 
         subjectBundle.onNext(Optional.fromNullable(savedInstanceState));
@@ -90,16 +98,20 @@ public abstract class NavigationInteractor<P, R extends Router> extends Interact
         subjectObject.onNext(new NavData(child, data));
     }
 
+    // Process Data Here
     protected void didBecomeActive(
             @Nullable Bundle savedInstanceState,
-            @Nullable String child,
-            @Nullable Object data
+            @Nullable String child, @Nullable Object data
     ) { }
+
+    // Subscribe Action Here
+    protected void didBecomeActive() {}
 
     @Override
     protected void willResignActive() {
         getNavigation().removeNode(nodeName);
         super.willResignActive();
+        isResignActive = true;
     }
 
     private static class NavData {
