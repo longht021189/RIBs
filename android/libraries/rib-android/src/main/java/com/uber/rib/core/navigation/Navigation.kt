@@ -44,6 +44,12 @@ abstract class Navigation(
         return nodeMap[name]?.get()
     }
 
+    open fun saveState() {
+        managerMap.forEach { entry ->
+            entry.value.saveState()
+        }
+    }
+
     open fun onBackPressed(): Boolean {
         managerMap.forEach {
             if (it.value.onBackPressed()) {
@@ -210,6 +216,16 @@ abstract class Navigation(
             onRefresh()
 
             return true
+        }
+
+        override fun saveState() {
+            if (uriStack.isEmpty()) return
+
+            val info = uriStack.peek()
+            val name = info.value.pathSegments.last()
+            val data = nodeMap[name]?.get()?.onEnterBackStack(info.data)
+
+            info.data = data
         }
 
         override fun close() {}

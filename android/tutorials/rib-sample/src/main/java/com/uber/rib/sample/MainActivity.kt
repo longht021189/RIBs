@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import com.uber.rib.core.IViewRouter
 import com.uber.rib.core.RibActivity
 import com.uber.rib.core.Router
+import com.uber.rib.core.navigation.Navigation
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 import javax.inject.Provider
@@ -12,7 +13,7 @@ import javax.inject.Provider
 class MainActivity : RibActivity() {
 
     @Inject
-    lateinit var navigation: NavigationUtil
+    lateinit var navigationUtil: NavigationUtil
 
     @Inject
     lateinit var map: Map<String, @JvmSuppressWildcards Provider<Router<*>>>
@@ -27,10 +28,14 @@ class MainActivity : RibActivity() {
     }
 
     override fun onBackPressed() {
-        if (navigation.onBackPressed()) {
+        if (navigationUtil.onBackPressed()) {
             return
         }
 
         super.onBackPressed()
+    }
+
+    override fun getNavigation(): Navigation? {
+        return navigationUtil
     }
 }

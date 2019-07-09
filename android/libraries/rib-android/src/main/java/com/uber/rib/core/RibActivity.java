@@ -29,6 +29,7 @@ import com.uber.autodispose.lifecycle.LifecycleScopes;
 import com.uber.rib.core.lifecycle.ActivityCallbackEvent;
 import com.uber.rib.core.lifecycle.ActivityLifecycleEvent;
 
+import com.uber.rib.core.navigation.Navigation;
 import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
 import io.reactivex.functions.Function;
@@ -206,13 +207,20 @@ public abstract class RibActivity extends AppCompatActivity
   @CallSuper
   @SuppressWarnings("CheckNullabilityTypes")
   protected void onDestroy() {
+    Navigation navigation = getNavigation();
+
+    if (navigation != null) {
+      navigation.saveState();
+    }
     if (lifecycleRelay != null) {
       lifecycleRelay.accept(ActivityLifecycleEvent.create(ActivityLifecycleEvent.Type.DESTROY));
     }
     if (router != null) {
       router.dispatchDetach().subscribe();
     }
+
     router = null;
+
     super.onDestroy();
   }
 
@@ -249,4 +257,7 @@ public abstract class RibActivity extends AppCompatActivity
    * @return the {@link Interactor}.
    */
   protected abstract IViewRouter<?> createRouter(ViewGroup parentViewGroup);
+
+  @Nullable
+  protected abstract Navigation getNavigation();
 }

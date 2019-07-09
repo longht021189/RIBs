@@ -26,6 +26,14 @@ class SplashInteractor @Inject constructor(
         nodeManager.addNode(NAME, this)
     }
 
+    override fun onNavigation(child: String?, data: Any?) {
+        super.onNavigation(child, data)
+    }
+
+    override fun onEnterBackStack(data: Any?): Any? {
+        return (data as? Boolean)?.let { !it } ?: false
+    }
+
     override fun willResignActive() {
         nodeManager.removeNode(NAME)
         super.willResignActive()

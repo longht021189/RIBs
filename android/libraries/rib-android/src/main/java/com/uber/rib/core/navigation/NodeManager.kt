@@ -10,4 +10,5 @@ interface NodeManager {
     fun removeNode(name: String)
 
     fun onBackPressed(): Boolean
+    fun saveState()
 }
