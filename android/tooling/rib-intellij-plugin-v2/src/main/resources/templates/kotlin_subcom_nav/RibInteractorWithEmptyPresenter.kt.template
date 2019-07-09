@@ -1,36 +1,21 @@
 package ${package_name}
 
-import javax.inject.Inject
-import dagger.Lazy
-import com.uber.rib.core.navigation.Navigation
-import com.uber.rib.core.Interactor
-import com.uber.rib.core.navigation.Node
 import com.uber.rib.core.Bundle
+import com.uber.rib.core.NavigationInteractor
+import com.uber.rib.core.navigation.Navigation
+import dagger.Lazy
+import javax.inject.Inject
 
 @${rib_name}Builder.${rib_name}Scope
 class ${rib_name}Interactor @Inject constructor(
     presenter: Lazy<${rib_name}Builder.${rib_name}Presenter>,
     router: Lazy<${rib_name}Router>,
-    private val navigation: Lazy<Navigation>
-) : Interactor<${rib_name}Builder.${rib_name}Presenter, ${rib_name}Router>(presenter, router) {
-
-    private val backStackName: String = TODO("backStackName, String HERE")
-    private val nodeManager by lazy {
-        navigation.get().getNodeManager(backStackName)
-    }
-
-    override fun didBecomeActive(savedInstanceState: Bundle?) {
-        super.didBecomeActive(savedInstanceState)
-        nodeManager.addNode(NAME, this)
-
+    navigation: Lazy<Navigation>
+) : NavigationInteractor<${rib_name}Builder.${rib_name}Presenter, ${rib_name}Router>(
+    presenter, router, navigation, TODO("Back Stack Name Here"), NAME
+) {
+    override fun didBecomeActive(savedInstanceState: Bundle?, child: String?, data: Any?) {
         // TODO: Add attachment logic here (RxSubscriptions, etc.).
-    }
-
-    override fun willResignActive() {
-        // TODO: Perform any required clean up here, or delete this method entirely if not needed.
-
-        nodeManager.removeNode(NAME)
-        super.willResignActive()
     }
 
     companion object {

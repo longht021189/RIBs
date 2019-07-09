@@ -1,6 +1,5 @@
 package com.uber.rib.sample.root.splash
 
-import android.util.Log
 import com.uber.rib.core.Bundle
 import com.uber.rib.core.NavigationInteractor
 import com.uber.rib.core.navigation.Navigation
@@ -17,11 +16,7 @@ class SplashInteractor @Inject constructor(
     presenter, router, navigation, NavigationUtil.BACK_STACK_MAIN, NAME
 ) {
     override fun didBecomeActive(savedInstanceState: Bundle?, child: String?, data: Any?) {
-        Log.e("DEBUG", "=======================> data = $data")
-    }
 
-    override fun onEnterBackStack(data: Any?): Any? {
-        return (data as? Boolean)?.let { !it } ?: false
     }
 
     interface SplashPresenter
