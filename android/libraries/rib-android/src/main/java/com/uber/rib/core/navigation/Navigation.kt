@@ -116,7 +116,7 @@ abstract class Navigation(
                     return this@Manager.backStackName
                 }
                 override fun add(path: Uri, data: Any?) {
-                    internalAdd(path, data)
+                    internalAdd(path, data, false)
                 }
                 override fun replace(path: Uri, removeDepth: Int, data: Any?) {
                     internalReplace(path, removeDepth, data)
@@ -150,14 +150,16 @@ abstract class Navigation(
             node?.onNavigation(child, input)
         }
 
-        private fun internalAdd(path: Uri, data: Any?) {
+        private fun internalAdd(path: Uri, data: Any?, isReplace: Boolean) {
             if (!uriStack.empty() && path == uriStack.peek().value) return
 
-            uriStack.peek().apply saveState@ {
-                val name = value.pathSegments.last()
-                val node = nodeMap[name]?.get()
+            if (!uriStack.empty() && !isReplace) {
+                uriStack.peek().apply saveState@{
+                    val name = value.pathSegments.last()
+                    val node = nodeMap[name]?.get()
 
-                this.data = node?.onEnterBackStack(data)
+                    this.data = node?.onEnterBackStack(data)
+                }
             }
             uriStack.push(UriInfo(path, data))
 
@@ -172,7 +174,7 @@ abstract class Navigation(
                 depth--
             }
 
-            internalAdd(path, data)
+            internalAdd(path, data, removeDepth != 0)
         }
 
         override fun add(path: Uri, data: Any?) {
