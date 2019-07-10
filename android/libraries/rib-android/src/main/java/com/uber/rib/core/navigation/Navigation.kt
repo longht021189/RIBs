@@ -19,16 +19,20 @@ abstract class Navigation(
         ArrayMap<String, WeakReference<Node>>()
     }
     private val managerMap by lazy {
-        ArrayMap<String, Manager>()
+        ArrayMap<String, NavigationManager>()
     }
 
-    protected fun createBackStack(backStackName: String, defaultUri: Uri, defaultData: Any?) {
+    protected fun createBackStack(backStackName: String, defaultUri: Uri, defaultData: Any? = null) {
         if (isClosed) return
         if (managerMap.contains(backStackName)) {
             throw IllegalArgumentException("Back Stack $backStackName Is Exists.")
         }
 
-        managerMap[backStackName] = Manager(defaultUri, defaultData, backStackName)
+        managerMap[backStackName] = create(defaultUri, defaultData, backStackName)
+    }
+
+    protected open fun create(defaultUri: Uri, defaultData: Any?, backStackName: String): NavigationManager {
+        return Manager(defaultUri, defaultData, backStackName)
     }
 
     fun getNodeManager(backStackName: String): NodeManager {
@@ -60,11 +64,11 @@ abstract class Navigation(
         return false
     }
 
-    open fun onAdd(manager: IManager, path: Uri, data: Any?) {
+    open fun onAdd(manager: IManager, path: Uri, data: Any? = null) {
         manager.add(path, data)
     }
 
-    open fun onReplace(manager: IManager, path: Uri, removeDepth: Int, data: Any?) {
+    open fun onReplace(manager: IManager, path: Uri, removeDepth: Int, data: Any? = null) {
         manager.replace(path, removeDepth, data)
     }
 
@@ -103,7 +107,7 @@ abstract class Navigation(
         defaultUri: Uri,
         defaultData: Any?,
         private val backStackName: String
-    ) : NodeManager, Closeable {
+    ) : NavigationManager {
 
         private val uriStack by lazy {
             val stack = Stack<UriInfo>()
@@ -232,6 +236,8 @@ abstract class Navigation(
 
         override fun close() {}
     }
+    
+    interface NavigationManager : NodeManager, Closeable
 
     interface IManager {
         val backStackName: String
