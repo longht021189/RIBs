@@ -84,6 +84,19 @@ abstract class Navigation(
         val value: Uri,
         var data: Any?
     ) {
+        val queryMap: Map<String, String?>? by lazy {
+            val names = value.queryParameterNames
+            if (names.isNotEmpty()) {
+                ArrayMap<String, String?>().apply {
+                    names.forEach {
+                        put(it, value.getQueryParameter(it))
+                    }
+                }
+            } else {
+                null
+            }
+        }
+
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (javaClass != other?.javaClass) return false
@@ -120,7 +133,7 @@ abstract class Navigation(
                     return this@Manager.backStackName
                 }
                 override fun add(path: Uri, data: Any?) {
-                    internalAdd(path, data, false)
+                    internalAdd(path, data)
                 }
                 override fun replace(path: Uri, removeDepth: Int, data: Any?) {
                     internalReplace(path, removeDepth, data)
@@ -128,15 +141,31 @@ abstract class Navigation(
             }
         }
 
-        private fun onRefresh() {
+        private fun compare(path1: List<String>, path2: List<String>?) : Boolean {
+            if (path1.isEmpty() && path2?.isNotEmpty() != true) return true
+            if (path1.size != path2?.size) return false
+
+            path1.forEachIndexed { i, value ->
+                if (value != path2[i]) return false
+            }
+
+            return true
+        }
+
+        private fun onRefresh(prevInfo: UriInfo?) {
             val path = uriStack.peek() ?: return
             var child: String? = null
             var node: Node? = null
+            val pathSegments = path.value.pathSegments
+            val isSameSegments = compare(pathSegments, prevInfo?.value?.pathSegments)
 
             run onNavigation@ {
-                path.value.pathSegments.forEach { name ->
+                val size = pathSegments.size
+
+                path.value.pathSegments.forEachIndexed { i, name ->
                     val n = getNode(name)
-                    if (n != null) {
+
+                    if (n != null && (i + 1 != size || !isSameSegments)) {
                         node = n
                     } else {
                         child = name
@@ -151,34 +180,69 @@ abstract class Navigation(
                 null
             }
 
-            node?.onNavigation(child, input)
+            node?.onNavigation(child, input, path.queryMap)
         }
 
-        private fun internalAdd(path: Uri, data: Any?, isReplace: Boolean) {
-            if (!uriStack.empty() && path == uriStack.peek().value) return
+        private fun internalAdd(path: Uri, data: Any?) {
+            val oldInfo = if (uriStack.empty()) null else uriStack.peek()
+            val newInfo = UriInfo(path, data)
 
-            if (!uriStack.empty() && !isReplace) {
-                uriStack.peek().apply saveState@{
-                    val name = value.pathSegments.last()
-                    val node = nodeMap[name]?.get()
+            if (oldInfo != null) {
+                val name = oldInfo.value.pathSegments.last()
+                val node = nodeMap[name]?.get()
 
-                    this.data = node?.onEnterBackStack(data)
-                }
+                oldInfo.data = node?.onEnterBackStack(oldInfo.data)
             }
-            uriStack.push(UriInfo(path, data))
-
-            onRefresh()
+            if (newInfo != oldInfo) {
+                uriStack.push(newInfo)
+                onRefresh(oldInfo)
+            }
         }
 
         private fun internalReplace(path: Uri, removeDepth: Int, data: Any?) {
             var depth = removeDepth
+            var isOldRemoved = false
+            val oldInfo = if (uriStack.empty()) null else uriStack.peek()
+            val newInfo = UriInfo(path, data)
 
             while (!uriStack.empty() && depth != 0) {
                 uriStack.pop()
+                isOldRemoved = true
                 depth--
             }
 
-            internalAdd(path, data, removeDepth != 0)
+            if (!isOldRemoved && oldInfo != null) {
+                val name = oldInfo.value.pathSegments.last()
+                val node = nodeMap[name]?.get()
+
+                oldInfo.data = node?.onEnterBackStack(oldInfo.data)
+            }
+
+            when {
+                (uriStack.empty() || newInfo != uriStack.peek()) -> {
+                    uriStack.push(newInfo)
+                    onRefresh(oldInfo)
+                }
+                (isOldRemoved) -> {
+                    onRefresh(oldInfo)
+                }
+            }
+        }
+
+        override fun getPath(): Uri? {
+            return if (uriStack.empty()) {
+                null
+            } else {
+                uriStack.peek().value
+            }
+        }
+
+        override fun getData(): Any? {
+            return if (uriStack.empty()) {
+                null
+            } else {
+                uriStack.peek().data
+            }
         }
 
         override fun add(path: Uri, data: Any?) {
@@ -205,7 +269,7 @@ abstract class Navigation(
                 null
             }
 
-            node.onNavigation(child, input)
+            node.onNavigation(child, input, path.queryMap)
         }
 
         override fun removeNode(name: String) {
@@ -218,9 +282,7 @@ abstract class Navigation(
                 return false
             }
 
-            uriStack.pop()
-            onRefresh()
-
+            onRefresh(uriStack.pop())
             return true
         }
 

@@ -15,7 +15,12 @@ class SplashInteractor @Inject constructor(
 ) : NavigationInteractor<SplashInteractor.SplashPresenter, SplashRouter>(
     presenter, router, navigation, NavigationUtil.BACK_STACK_MAIN, NAME
 ) {
-    override fun didBecomeActive(savedInstanceState: Bundle?, child: String?, data: Any?) {
+    override fun didBecomeActive(
+        savedInstanceState: Bundle?,
+        child: String?,
+        data: Any?,
+        queryParameters: Map<String, String?>?
+    ) {
 
     }
 

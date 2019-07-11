@@ -10,6 +10,8 @@ import dagger.Lazy;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
+import java.util.Map;
+
 public abstract class NavigationInteractor<P, R extends Router> extends Interactor<P, R> implements Node {
 
     @NonNull
@@ -82,7 +84,8 @@ public abstract class NavigationInteractor<P, R extends Router> extends Interact
                     Data data = (Data) d;
 
                     didBecomeActive(data.savedInstanceState,
-                            data.navData.child, data.navData.data);
+                            data.navData.child, data.navData.data,
+                            data.navData.queryParameters);
 
                     if (isResignActive) {
                         isResignActive = false;
@@ -94,14 +97,16 @@ public abstract class NavigationInteractor<P, R extends Router> extends Interact
     }
 
     @Override
-    public final void onNavigation(@Nullable String child, @Nullable Object data) {
-        subjectObject.onNext(new NavData(child, data));
+    public final void onNavigation(@Nullable String child, @Nullable Object data,
+                                   @Nullable Map<String, String> queryParameters) {
+        subjectObject.onNext(new NavData(child, data, queryParameters));
     }
 
     // Process Data Here
     protected void didBecomeActive(
             @Nullable Bundle savedInstanceState,
-            @Nullable String child, @Nullable Object data
+            @Nullable String child, @Nullable Object data,
+            @Nullable Map<String, String> queryParameters
     ) { }
 
     // Subscribe Action Here
@@ -122,19 +127,13 @@ public abstract class NavigationInteractor<P, R extends Router> extends Interact
         @Nullable
         private final Object data;
 
-        NavData(@Nullable String child, @Nullable Object data) {
+        @Nullable
+        private final Map<String, String> queryParameters;
+
+        NavData(@Nullable String child, @Nullable Object data, @Nullable Map<String, String> queryParameters) {
             this.child = child;
             this.data = data;
-        }
-
-        @Nullable
-        public String getChild() {
-            return child;
-        }
-
-        @Nullable
-        public Object getData() {
-            return data;
+            this.queryParameters = queryParameters;
         }
 
         @Override
@@ -145,13 +144,17 @@ public abstract class NavigationInteractor<P, R extends Router> extends Interact
             NavData navData = (NavData) o;
 
             if (child != null ? !child.equals(navData.child) : navData.child != null) return false;
-            return data != null ? data.equals(navData.data) : navData.data == null;
+            if (data != null ? !data.equals(navData.data) : navData.data != null) return false;
+            return queryParameters != null
+                    ? queryParameters.equals(navData.queryParameters)
+                    : navData.queryParameters == null;
         }
 
         @Override
         public int hashCode() {
             int result = child != null ? child.hashCode() : 0;
             result = 31 * result + (data != null ? data.hashCode() : 0);
+            result = 31 * result + (queryParameters != null ? queryParameters.hashCode() : 0);
             return result;
         }
     }

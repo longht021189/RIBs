@@ -3,6 +3,9 @@ package com.uber.rib.core.navigation
 import android.net.Uri
 
 interface NodeManager {
+    fun getPath(): Uri?
+    fun getData(): Any?
+
     fun add(path: Uri, data: Any? = null)
     fun replace(path: Uri, data: Any? = null, removeDepth: Int = 1)
 

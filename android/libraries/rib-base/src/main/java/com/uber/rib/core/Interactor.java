@@ -174,9 +174,8 @@ public abstract class Interactor<P, R extends Router>
   }
 
   @Override
-  public void onNavigation(@Nullable String child, @Nullable Object data) {
-
-  }
+  public void onNavigation(@Nullable String child, @Nullable Object data,
+                           @Nullable Map<String, String> queryParameters) { }
 
   @Nullable
   @Override

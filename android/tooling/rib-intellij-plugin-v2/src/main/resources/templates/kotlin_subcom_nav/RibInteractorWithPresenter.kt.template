@@ -14,7 +14,10 @@ class ${rib_name}Interactor @Inject constructor(
 ) : NavigationInteractor<${rib_name}Interactor.${rib_name}Presenter, ${rib_name}Router>(
     presenter, router, navigation, TODO("Back Stack Name Here"), NAME
 ) {
-    override fun didBecomeActive(savedInstanceState: Bundle?, child: String?, data: Any?) {
+    override fun didBecomeActive(
+        savedInstanceState: Bundle?, child: String?, data: Any?,
+        queryParameters: Map<String, String?>?
+    ) {
         // TODO: Load input here
     }
 

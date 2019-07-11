@@ -26,7 +26,7 @@ class RootInteractor @Inject constructor(
         nodeManager.addNode(NAME, this)
     }
 
-    override fun onNavigation(child: String?, data: Any?) {
+    override fun onNavigation(child: String?, data: Any?, queryParameters: Map<String, String?>?) {
         router.routeTo(child)
     }
 
