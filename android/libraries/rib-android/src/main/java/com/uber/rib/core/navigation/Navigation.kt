@@ -6,6 +6,7 @@ import androidx.collection.LruCache
 import java.io.Closeable
 import java.lang.ref.WeakReference
 import java.util.*
+import kotlin.collections.HashMap
 
 abstract class Navigation(
     private val maxSizeCache: Int = MAX_SIZE_CACHE_DEFAULT
@@ -152,7 +153,7 @@ abstract class Navigation(
             return true
         }
 
-        private fun onRefresh(prevInfo: UriInfo?) {
+        private fun onRefresh(prevInfo: UriInfo?, isBack: Boolean) {
             val path = uriStack.peek() ?: return
             var child: String? = null
             var node: Node? = null
@@ -180,7 +181,18 @@ abstract class Navigation(
                 null
             }
 
-            node?.onNavigation(child, input, path.queryMap)
+            if (isBack) {
+                val map = HashMap<String, String?>()
+
+                path.queryMap?.forEach { entry ->
+                    map[entry.key] = entry.value
+                }
+                map[BACK_STATE] = BACK_STATE_VALUE
+
+                node?.onNavigation(child, input, map)
+            } else {
+                node?.onNavigation(child, input, path.queryMap)
+            }
         }
 
         private fun internalAdd(path: Uri, data: Any?) {
@@ -195,7 +207,7 @@ abstract class Navigation(
             }
             if (newInfo != oldInfo) {
                 uriStack.push(newInfo)
-                onRefresh(oldInfo)
+                onRefresh(oldInfo, false)
             }
         }
 
@@ -221,10 +233,10 @@ abstract class Navigation(
             when {
                 (uriStack.empty() || newInfo != uriStack.peek()) -> {
                     uriStack.push(newInfo)
-                    onRefresh(oldInfo)
+                    onRefresh(oldInfo, false)
                 }
                 (isOldRemoved) -> {
-                    onRefresh(oldInfo)
+                    onRefresh(oldInfo, true)
                 }
             }
         }
@@ -282,7 +294,7 @@ abstract class Navigation(
                 return false
             }
 
-            onRefresh(uriStack.pop())
+            onRefresh(uriStack.pop(), true)
             return true
         }
 
@@ -309,6 +321,12 @@ abstract class Navigation(
     }
 
     companion object {
+        fun isBack(queryParameters: Map<String, String?>?): Boolean {
+            return queryParameters?.get(BACK_STATE) == BACK_STATE_VALUE
+        }
+
         private const val MAX_SIZE_CACHE_DEFAULT = 10
+        private const val BACK_STATE = "ABC!@#!@$@#$"
+        private const val BACK_STATE_VALUE = "ABC!@#!@$@#_!@#!@#"
     }
 }

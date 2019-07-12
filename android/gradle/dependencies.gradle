@@ -61,7 +61,7 @@ def build = [
     errorProneTestHelpers: "com.google.errorprone:error_prone_test_helpers:${versions.errorProne}",
     nullAway: 'com.uber.nullaway:nullaway:0.7.0',
     gradlePlugins: [
-        android: 'com.android.tools.build:gradle:3.4.1',
+        android: 'com.android.tools.build:gradle:3.4.2',
         errorprone: "net.ltgt.gradle:gradle-errorprone-plugin:0.8",
         nullaway: "net.ltgt.gradle:gradle-nullaway-plugin:0.2",
         apt: "net.ltgt.gradle:gradle-apt-plugin:0.21"
