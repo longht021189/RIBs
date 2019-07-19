@@ -2,7 +2,6 @@ package com.uber.rib.core.navigation
 
 import android.net.Uri
 import androidx.collection.ArrayMap
-import androidx.collection.LruCache
 import java.io.Closeable
 import java.lang.ref.WeakReference
 import java.util.*
@@ -13,9 +12,6 @@ abstract class Navigation(
 ) : Closeable {
     private var isClosed = false
 
-    private val lruCache by lazy {
-        LruCache<String, Node>(maxSizeCache)
-    }
     private val nodeMap by lazy {
         ArrayMap<String, WeakReference<Node>>()
     }
@@ -268,7 +264,6 @@ abstract class Navigation(
         override fun addNode(name: String, node: Node) {
             if (isClosed) return
 
-            lruCache.put(name, node)
             nodeMap[name] = WeakReference(node)
 
             val path = uriStack.peek()
@@ -285,7 +280,6 @@ abstract class Navigation(
         }
 
         override fun removeNode(name: String) {
-            lruCache.remove(name)
             nodeMap.remove(name)
         }
 
