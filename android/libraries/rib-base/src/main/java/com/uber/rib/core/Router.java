@@ -195,7 +195,7 @@ public class Router<I extends com.uber.rib.core.Interactor> {
     getInteractor().dispatchAttach(interactorBundle);
   }
 
-  protected void dispatchDetach() {
+  public void dispatchDetach() {
     checkForMainThread();
 
     getInteractor().dispatchDetach();

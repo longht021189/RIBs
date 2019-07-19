@@ -23,7 +23,7 @@ class RootRouter @Inject constructor(
         if (child == currentName) return
 
         currentRouter?.let {
-            detachChild(it).subscribe()
+            detachChild(it)
 
             if (it is IViewRouter<*>) {
                 view.removeView(it.view)

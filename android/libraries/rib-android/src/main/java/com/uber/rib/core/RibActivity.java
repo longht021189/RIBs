@@ -16,9 +16,10 @@
 package com.uber.rib.core;
 
 import android.content.Intent;
+import android.view.ViewGroup;
 import androidx.annotation.CallSuper;
 import androidx.annotation.Nullable;
-import android.view.ViewGroup;
+import androidx.appcompat.app.AppCompatActivity;
 import com.jakewharton.rxrelay2.BehaviorRelay;
 import com.jakewharton.rxrelay2.PublishRelay;
 import com.jakewharton.rxrelay2.Relay;
@@ -28,13 +29,10 @@ import com.uber.autodispose.lifecycle.LifecycleScopeProvider;
 import com.uber.autodispose.lifecycle.LifecycleScopes;
 import com.uber.rib.core.lifecycle.ActivityCallbackEvent;
 import com.uber.rib.core.lifecycle.ActivityLifecycleEvent;
-
 import com.uber.rib.core.navigation.Navigation;
 import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
-import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
-import androidx.appcompat.app.AppCompatActivity;
 
 /** Base implementation for all VIP {@link android.app.Activity}s. */
 public abstract class RibActivity extends AppCompatActivity
@@ -216,7 +214,7 @@ public abstract class RibActivity extends AppCompatActivity
       lifecycleRelay.accept(ActivityLifecycleEvent.create(ActivityLifecycleEvent.Type.DESTROY));
     }
     if (router != null) {
-      router.dispatchDetach().subscribe();
+      router.dispatchDetach();
     }
 
     router = null;
