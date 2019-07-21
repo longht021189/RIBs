@@ -288,6 +288,11 @@ abstract class Navigation(
                 return false
             }
 
+            val lastNode = getNode(uriStack.peek().value.pathSegments.last())
+            if (lastNode?.handleBackPress() == true) {
+                return true
+            }
+
             onRefresh(uriStack.pop(), true)
             return true
         }

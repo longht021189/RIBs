@@ -8,4 +8,5 @@ public interface Node {
                       @Nullable Map<String, String> queryParameters);
 
     @Nullable Object onEnterBackStack(@Nullable Object data);
+    boolean handleBackPress();
 }
