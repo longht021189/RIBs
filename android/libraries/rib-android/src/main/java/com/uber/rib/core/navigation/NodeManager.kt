@@ -3,6 +3,9 @@ package com.uber.rib.core.navigation
 import android.net.Uri
 
 interface NodeManager {
+    val stackSize: Int
+
+    fun getIndex(path: Uri): Int?
     fun getPath(): Uri?
     fun getData(): Any?
 
@@ -13,5 +16,6 @@ interface NodeManager {
     fun removeNode(name: String)
 
     fun onBackPressed(): Boolean
+    fun popStack(size: Int, force: Boolean = false): Boolean
     fun saveState()
 }

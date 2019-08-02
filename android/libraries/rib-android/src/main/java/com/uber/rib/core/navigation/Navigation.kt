@@ -138,6 +138,10 @@ abstract class Navigation(
             }
         }
 
+        override val stackSize: Int get() {
+            return uriStack.size
+        }
+
         private fun compare(path1: List<String>, path2: List<String>?) : Boolean {
             if (path1.isEmpty() && path2?.isNotEmpty() != true) return true
             if (path1.size != path2?.size) return false
@@ -237,6 +241,19 @@ abstract class Navigation(
             }
         }
 
+        override fun getIndex(path: Uri): Int? {
+            val size = stackSize
+            if (size == 0) return null
+            
+            for (i in 0 until size) {
+                if (uriStack[i].value == path) {
+                    return i
+                }
+            }
+
+            return null
+        }
+
         override fun getPath(): Uri? {
             return if (uriStack.empty()) {
                 null
@@ -284,16 +301,31 @@ abstract class Navigation(
         }
 
         override fun onBackPressed(): Boolean {
-            if (uriStack.size <= 1) {
+            return popStack(1)
+        }
+
+        override fun popStack(size: Int, force: Boolean): Boolean {
+            if (uriStack.size <= size) {
                 return false
             }
 
-            val lastNode = getNode(uriStack.peek().value.pathSegments.last())
-            if (lastNode?.handleBackPress() == true) {
-                return true
+            if (!force) {
+                val lastNode = getNode(uriStack.peek().value.pathSegments.last())
+                if (lastNode?.handleBackPress() == true) {
+                    return true
+                }
             }
 
-            onRefresh(uriStack.pop(), true)
+            val prev = uriStack.pop()
+
+            if (size > 1) {
+                for (i in 0 until (size - 1)) {
+                    uriStack.pop()
+                }
+            }
+
+            onRefresh(prev, true)
+
             return true
         }
 
