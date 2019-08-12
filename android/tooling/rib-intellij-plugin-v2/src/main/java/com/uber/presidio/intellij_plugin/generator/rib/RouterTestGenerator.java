@@ -22,7 +22,7 @@ public class RouterTestGenerator extends Generator {
   private static final String TEMPLATE_NAME = "RibRouterTest";
 
   public RouterTestGenerator(String packageName, String ribName, boolean isKotlinSelected, boolean isSubcomponent) {
-    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME, isSubcomponent, false, false, false);
+    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME, isSubcomponent, false, false, false, false);
   }
 
   @Override

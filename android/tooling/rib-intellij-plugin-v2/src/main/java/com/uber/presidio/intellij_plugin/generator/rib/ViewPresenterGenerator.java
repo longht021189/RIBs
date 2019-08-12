@@ -17,18 +17,18 @@ package com.uber.presidio.intellij_plugin.generator.rib;
 
 import com.uber.presidio.intellij_plugin.generator.Generator;
 
-public class ViewBuilderGenerator extends Generator {
+public class ViewPresenterGenerator extends Generator {
 
-  private static final String TEMPLATE_NAME = "RibViewBuilder";
+  private static final String TEMPLATE_NAME = "RibPresenter";
 
-  public ViewBuilderGenerator(String packageName, String ribName, boolean isKotlinSelected,
-                              boolean isSubcomponent, boolean useQualifierView, boolean useQualifierViewGroup, boolean createViewAsync) {
-    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME,
-            isSubcomponent, false, useQualifierView, useQualifierViewGroup, createViewAsync);
+  public ViewPresenterGenerator(String packageName, String ribName, boolean isKotlinSelected,
+                                boolean isSubcomponent, boolean useQualifierView, boolean useQualifierViewGroup, boolean createViewAsync) {
+    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME, isSubcomponent,
+            false, useQualifierView, useQualifierViewGroup, createViewAsync);
   }
 
   @Override
   public String getClassName() {
-    return String.format("%sBuilder", getRibName());
+    return String.format("%sPresenter", getRibName());
   }
 }

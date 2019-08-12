@@ -47,7 +47,7 @@ public class GenerateRibDialog extends DialogWrapper {
     createPresenterAndViewCheckBox.addActionListener(actionEvent -> {
       if (createPresenterAndViewCheckBox.isSelected()) {
         createLayout.setEnabled(false);
-        createViewAsync.setEnabled(false);
+        createViewAsync.setEnabled(true);
       } else {
         createLayout.setEnabled(false);
         createViewAsync.setEnabled(false);
@@ -59,10 +59,10 @@ public class GenerateRibDialog extends DialogWrapper {
     createSubcomponent.setSelected(true);
 
     createLayout.setSelected(false);
-    createViewAsync.setSelected(false);
+    createViewAsync.setSelected(true);
 
     createLayout.setEnabled(false);
-    createViewAsync.setEnabled(false);
+    createViewAsync.setEnabled(true);
 
     useQualifier.setSelected(true);
     useQualifierView.setSelected(true);

@@ -1,0 +1,73 @@
+package ${package_name}
+
+import android.view.View
+import javax.inject.Inject
+import dagger.android.DispatchingAndroidInjector
+import com.uber.rib.core.Router
+import dagger.Provides
+import dagger.multibindings.IntoMap
+import dagger.multibindings.StringKey
+import com.uber.rib.android.lazy.IPresenterLazy
+
+class ${rib_name}Builder private constructor(injector: DispatchingAndroidInjector<Any>) {
+
+    @Inject internal lateinit var router: ${rib_name}Router
+
+    init {
+        injector.inject(this)
+    }
+
+    @dagger.Module
+    abstract class ParentModule {
+
+        @${rib_name}Scope
+        @dagger.android.ContributesAndroidInjector(modules = [Module::class])
+        abstract fun contribute${rib_name}BuilderInjector(): ${rib_name}Builder
+
+        @dagger.Module
+        companion object {
+
+            @JvmStatic @Provides
+            @StringKey("${rib_name_to_upper}") @IntoMap
+            fun provide${rib_name}Builder(injector: DispatchingAndroidInjector<Any>): Router<*> {
+                return ${rib_name}Builder(injector).router
+            }
+        }
+    }
+
+    @dagger.Module
+    internal abstract class Module {
+
+        @${rib_name}Scope
+        @dagger.Binds
+        internal abstract fun binds${rib_name}PresenterInternal(
+            presenter: ${rib_name}Presenter
+        ) : ${rib_name}Interactor.${rib_name}Presenter
+
+        @${rib_name}Scope
+        @${rib_name}Qualifier
+        @dagger.Binds
+        internal abstract fun bind${rib_name}Presenter(
+            presenter: ${rib_name}Presenter
+        ) : IPresenterLazy<View>
+
+        @dagger.Module
+        companion object {
+
+            @${rib_name}Scope
+            @dagger.Provides
+            @JvmStatic
+            internal fun provide${rib_name}Presenter(): ${rib_name}Presenter {
+                TODO("Inflate a new view using the provided inflater, or create a new view programatically using the provided context from the parentViewGroup.")
+            }
+        }
+    }
+
+    @javax.inject.Scope
+    @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
+    internal annotation class ${rib_name}Scope
+
+    @javax.inject.Qualifier
+    @kotlin.annotation.Retention(AnnotationRetention.BINARY)
+    internal annotation class ${rib_name}Qualifier
+}

@@ -44,14 +44,28 @@ public final class Generators {
       throw new RuntimeException("Create Layout is not Supported yet.");
     }
 
-    InteractorWithPresenterGenerator interactorGenerator =
-        new InteractorWithPresenterGenerator(packageName, ribName, isKotlinSelected, isSubcomponent, useNavigation);
-    ViewBuilderGenerator viewBuilderGenerator = new ViewBuilderGenerator(packageName, ribName, isKotlinSelected, isSubcomponent, useQualifierView, useQualifierViewGroup);
-    ViewGenerator viewGenerator = new ViewGenerator(packageName, ribName, isKotlinSelected, isSubcomponent);
-    ViewRouterGenerator viewRouterGenerator = new ViewRouterGenerator(packageName, ribName, isKotlinSelected, isSubcomponent, useQualifierView, useQualifierViewGroup);
+    InteractorWithPresenterGenerator interactorGenerator = new InteractorWithPresenterGenerator(packageName, ribName, isKotlinSelected, isSubcomponent, useNavigation, createViewAsync);
+    ViewBuilderGenerator viewBuilderGenerator = new ViewBuilderGenerator(packageName, ribName, isKotlinSelected, isSubcomponent, useQualifierView, useQualifierViewGroup, createViewAsync);
+    ViewGenerator viewGenerator = new ViewGenerator(packageName, ribName, isKotlinSelected, isSubcomponent, createViewAsync);
+    ViewRouterGenerator viewRouterGenerator = new ViewRouterGenerator(packageName, ribName, isKotlinSelected, isSubcomponent, useQualifierView, useQualifierViewGroup, createViewAsync);
 
     // TODO Subcomponent Packet is not Support Test yet
     if (isSubcomponent) {
+      if (createViewAsync) {
+        ViewPresenterGenerator viewPresenterGenerator = new ViewPresenterGenerator(packageName,
+                ribName, isKotlinSelected, isSubcomponent, useQualifierView, useQualifierViewGroup, createViewAsync);
+
+        return new GeneratorPair(
+            ImmutableList.of(
+                interactorGenerator,
+                viewBuilderGenerator,
+                viewGenerator,
+                viewRouterGenerator,
+                viewPresenterGenerator),
+            ImmutableList.of()
+        );
+      }
+
       return new GeneratorPair(
           ImmutableList.of(
               interactorGenerator,

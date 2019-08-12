@@ -24,8 +24,8 @@ public class ViewGenerator extends Generator {
 
   private static final String TEMPLATE_NAME = "RibView";
 
-  public ViewGenerator(String packageName, String ribName, boolean isKotlinSelected, boolean isSubcomponent) {
-    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME, isSubcomponent, false, false, false);
+  public ViewGenerator(String packageName, String ribName, boolean isKotlinSelected, boolean isSubcomponent, boolean createViewAsync) {
+    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME, isSubcomponent, false, false, false, createViewAsync);
   }
 
   @Override

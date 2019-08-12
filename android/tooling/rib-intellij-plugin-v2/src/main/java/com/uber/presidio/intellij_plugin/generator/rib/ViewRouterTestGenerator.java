@@ -23,7 +23,7 @@ public class ViewRouterTestGenerator extends Generator {
 
   public ViewRouterTestGenerator(String packageName, String ribName, boolean isKotlinSelected, boolean isSubcomponent) {
     super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME,
-            isSubcomponent, false, false, false);
+            isSubcomponent, false, false, false, false);
   }
 
   @Override

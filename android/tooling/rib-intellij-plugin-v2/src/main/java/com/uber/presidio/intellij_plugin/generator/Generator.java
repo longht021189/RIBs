@@ -58,7 +58,7 @@ public abstract class Generator {
    */
   public Generator(String packageName, String ribName, boolean isKotlin,
                    String templateName, boolean isSubcomponent, boolean useNavigation,
-                   boolean useQualifierView, boolean useQualifierViewGroup) {
+                   boolean useQualifierView, boolean useQualifierViewGroup, boolean createViewAsync) {
     this.packageName = packageName;
     this.ribName = ribName;
     this.isKotlin = isKotlin;
@@ -111,6 +111,9 @@ public abstract class Generator {
         }
       } else if (isSubcomponent) {
         resource = "/templates/java_subcom/" + templateName + ".java.template";
+      }
+      if (createViewAsync) {
+        resource = "/templates/lazy/" + templateName + ".kt.template";
       }
 
       InputStream resourceAsStream1 =
