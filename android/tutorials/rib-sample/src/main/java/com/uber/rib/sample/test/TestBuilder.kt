@@ -1,13 +1,13 @@
 package com.uber.rib.sample.test
 
 import android.view.View
-import com.uber.rib.android.lazy.IPresenterLazy
+import javax.inject.Inject
+import dagger.android.DispatchingAndroidInjector
 import com.uber.rib.core.Router
 import dagger.Provides
-import dagger.android.DispatchingAndroidInjector
 import dagger.multibindings.IntoMap
 import dagger.multibindings.StringKey
-import javax.inject.Inject
+import com.uber.rib.android.lazy.IPresenterLazy
 
 class TestBuilder private constructor(injector: DispatchingAndroidInjector<Any>) {
 

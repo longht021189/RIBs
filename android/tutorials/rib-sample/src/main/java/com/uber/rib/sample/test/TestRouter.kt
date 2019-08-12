@@ -1,10 +1,10 @@
 package com.uber.rib.sample.test
 
 import com.uber.rib.core.Router
-import dagger.Lazy
-import io.reactivex.Observable
 import javax.inject.Inject
+import dagger.Lazy
 import javax.inject.Provider
+import io.reactivex.Observable
 
 @TestBuilder.TestScope
 class TestRouter @Inject constructor(
