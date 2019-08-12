@@ -55,9 +55,10 @@ class ${rib_name}Builder private constructor(injector: DispatchingAndroidInjecto
         companion object {
 
             @${rib_name}Scope
+            @${rib_name}Qualifier
             @dagger.Provides
             @JvmStatic
-            internal fun provide${rib_name}Presenter(): ${rib_name}Presenter {
+            internal fun provide${rib_name}PresenterBuilder(): IPresenterLazy.Builder {
                 TODO("Inflate a new view using the provided inflater, or create a new view programatically using the provided context from the parentViewGroup.")
             }
         }

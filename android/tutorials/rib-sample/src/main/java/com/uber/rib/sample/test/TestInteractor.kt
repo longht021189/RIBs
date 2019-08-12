@@ -1,9 +1,8 @@
 package com.uber.rib.sample.test
 
-import javax.inject.Inject
-import dagger.Lazy
 import com.uber.rib.core.Interactor
-import com.uber.rib.core.Bundle
+import dagger.Lazy
+import javax.inject.Inject
 
 @TestBuilder.TestScope
 class TestInteractor @Inject constructor(

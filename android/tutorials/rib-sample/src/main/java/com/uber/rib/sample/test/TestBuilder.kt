@@ -1,13 +1,13 @@
 package com.uber.rib.sample.test
 
 import android.view.View
-import javax.inject.Inject
-import dagger.android.DispatchingAndroidInjector
+import com.uber.rib.android.lazy.IPresenterLazy
 import com.uber.rib.core.Router
 import dagger.Provides
+import dagger.android.DispatchingAndroidInjector
 import dagger.multibindings.IntoMap
 import dagger.multibindings.StringKey
-import com.uber.rib.android.lazy.IPresenterLazy
+import javax.inject.Inject
 
 class TestBuilder private constructor(injector: DispatchingAndroidInjector<Any>) {
 
@@ -55,9 +55,10 @@ class TestBuilder private constructor(injector: DispatchingAndroidInjector<Any>)
         companion object {
 
             @TestScope
+            @TestQualifier
             @dagger.Provides
             @JvmStatic
-            internal fun provideTestPresenter(): TestPresenter {
+            internal fun provideTestPresenterBuilder(): IPresenterLazy.Builder {
                 TODO("Inflate a new view using the provided inflater, or create a new view programatically using the provided context from the parentViewGroup.")
             }
         }

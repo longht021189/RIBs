@@ -1,20 +1,18 @@
 package ${package_name}
 
-import android.content.Context
-import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup
-import javax.inject.Inject
-import androidx.annotation.LayoutRes
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater
 import com.uber.rib.android.lazy.IPresenterLazy
-import com.uber.rib.android.lazy.WeakObserver
-import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.Observable
-import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.subjects.BehaviorSubject
+import javax.inject.Inject
 
-class ${rib_name}Presenter : ${rib_name}Interactor.${rib_name}Presenter, IPresenterLazy<${rib_name}View> {
+@${rib_name}Builder.${rib_name}Scope
+class ${rib_name}Presenter @Inject constructor(
+    @${rib_name}Builder.${rib_name}Qualifier
+    builder: IPresenterLazy.Builder
+) : ${rib_name}Interactor.${rib_name}Presenter, IPresenterLazy<${rib_name}View> {
 
     private val viewSubject by lazy {
         BehaviorSubject.create<${rib_name}View>()
@@ -24,27 +22,14 @@ class ${rib_name}Presenter : ${rib_name}Interactor.${rib_name}Presenter, IPresen
                 view, _, _ -> onInflateFinished(view)
         }
     }
-    private var observer: Observer<*>? = null
 
     override val view: Observable<${rib_name}View> get() {
         return viewSubject
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    constructor(parent: ViewGroup, @LayoutRes resId: Int) {
-        AsyncLayoutInflater(parent.context).inflate(resId, parent, listener)
-    }
-    constructor(context: Context, @LayoutRes resId: Int) {
-        AsyncLayoutInflater(context).inflate(resId, null, listener)
-    }
-    constructor(parent: IPresenterLazy<View>, @LayoutRes resId: Int) {
-        val observer = object : WeakObserver.SimpleObserver<View>() {
-            override fun onNext(t: View) {
-                AsyncLayoutInflater(t.context).inflate(resId, t as? ViewGroup, listener)
-            }
-        }
-        parent.view.take(1).subscribe(observer)
-        this.observer = observer
+    init {
+        builder.build(listener)
     }
 
     private fun onInflateFinished(view: View) {
