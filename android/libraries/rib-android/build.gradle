@@ -42,6 +42,7 @@ android {
     sourceSets {
         main.java.srcDirs += '../rib-base/src/main/java'
         main.java.srcDirs += '../rib-uava/src/main/java'
+        main.java.srcDirs += '../../tooling/rib-intellij-plugin-v2/src/main/resources'
     }
 }
 

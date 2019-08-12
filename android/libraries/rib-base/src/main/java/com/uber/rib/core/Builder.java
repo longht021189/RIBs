@@ -24,6 +24,7 @@ package com.uber.rib.core;
  * @param <T> type of interactor to build.
  * @param <D> type of dependency required to build the interactor.
  */
+@Deprecated
 public abstract class Builder<T extends Router, D> {
 
   private final D dependency;
