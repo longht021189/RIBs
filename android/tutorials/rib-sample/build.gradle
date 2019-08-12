@@ -40,17 +40,18 @@ dependencies {
     implementation (project(':libraries:rib-android')) {
         exclude group: 'com.google.guava', module: 'guava'
     }
-    implementation (project(':libraries:rib-base')) {
+    /*implementation (project(':libraries:rib-base')) {
         exclude group: 'com.google.guava', module: 'guava'
-    }
-    implementation (project(':libraries:rib-uava')) {
+    }*/
+    /*implementation (project(':libraries:rib-uava')) {
         exclude group: 'com.google.guava', module: 'guava'
-    }
+    }*/
     implementation (deps.androidx.appcompat) {
         exclude group: 'com.google.guava', module: 'guava'
     }
     implementation "com.google.dagger:dagger-producers:${deps.versions.dagger}"
     implementation 'com.google.guava:guava:28.0-android'
+    implementation deps.uber.autodisposeLifecycle
 
     kapt deps.apt.daggerCompiler
     kapt deps.apt.daggerSupportProcessor

@@ -38,18 +38,27 @@ android {
         sourceCompatibility deps.build.javaVersion
         targetCompatibility deps.build.javaVersion
     }
+
+    sourceSets {
+        main.java.srcDirs += '../rib-base/src/main/java'
+        main.java.srcDirs += '../rib-uava/src/main/java'
+    }
 }
 
 dependencies {
-    api project(":libraries:rib-base")
-    api deps.external.rxrelay2
-    api deps.external.rxjava2
-    api deps.external.daggerSupport
+    // api project(":libraries:rib-base")
 
+    implementation deps.external.rxrelay2
+    implementation deps.external.rxjava2
+    implementation deps.external.daggerSupport
+    implementation deps.uber.autodispose
+    implementation deps.uber.autodisposeLifecycle
     implementation deps.apt.javaxInject
     implementation deps.androidx.annotations
     implementation deps.androidx.appcompat
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    compileOnly deps.androidx.annotations
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
