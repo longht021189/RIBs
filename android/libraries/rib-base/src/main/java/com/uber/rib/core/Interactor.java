@@ -16,10 +16,8 @@
 package com.uber.rib.core;
 
 import androidx.annotation.CallSuper;
-import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 import androidx.annotation.NonNull;
-
+import androidx.annotation.Nullable;
 import com.jakewharton.rxrelay2.BehaviorRelay;
 import com.jakewharton.rxrelay2.Relay;
 import com.uber.autodispose.lifecycle.CorrespondingEventsFunction;
@@ -27,19 +25,15 @@ import com.uber.autodispose.lifecycle.LifecycleEndedException;
 import com.uber.autodispose.lifecycle.LifecycleScopeProvider;
 import com.uber.autodispose.lifecycle.LifecycleScopes;
 import com.uber.rib.core.lifecycle.InteractorEvent;
+import com.uber.rib.core.navigation.Node;
 import dagger.Lazy;
-
-import javax.inject.Inject;
-import java.util.Map;
-
 import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
-import io.reactivex.functions.Function;
+
+import java.util.Map;
 
 import static com.uber.rib.core.lifecycle.InteractorEvent.ACTIVE;
 import static com.uber.rib.core.lifecycle.InteractorEvent.INACTIVE;
-
-import com.uber.rib.core.navigation.Node;
 
 /**
  * The base implementation for all {@link Interactor}s.
@@ -182,5 +176,9 @@ public abstract class Interactor<P, R extends Router>
   @Override
   public Object onEnterBackStack(@Nullable Object data) {
     return data;
+  }
+
+  public boolean onError(@NonNull Throwable error) {
+    return false;
   }
 }

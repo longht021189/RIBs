@@ -16,10 +16,7 @@
 package com.uber.rib.core;
 
 import android.os.Looper;
-import androidx.annotation.CallSuper;
-import androidx.annotation.MainThread;
-import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
+import androidx.annotation.*;
 
 import java.util.List;
 import java.util.Locale;
@@ -104,7 +101,7 @@ public class Router<I extends com.uber.rib.core.Interactor> {
    * Attaches a child router to this router. This method will automatically tag the child router by
    * its class name to namespace its saved instance state {@link Bundle} object.
    *
-   * <p>If you have multiple children of the same class, use {@link Router#attachChild(Router,
+   * <p>If you have multiple children of the same class, use {link Router#attachChild(Router,
    * String)} to specify a custom tag.
    *
    * @param childRouter the {@link Router} to be attached.
@@ -252,5 +249,17 @@ public class Router<I extends com.uber.rib.core.Interactor> {
     } catch (Exception e) {
       return Thread.currentThread();
     }
+  }
+
+  public boolean onError(@NonNull Throwable error) {
+    if (children.size() > 0) {
+      for (Router child : children) {
+        if (child.handleBackPress()) {
+          return true;
+        }
+      }
+    }
+
+    return getInteractor().onError(error);
   }
 }
