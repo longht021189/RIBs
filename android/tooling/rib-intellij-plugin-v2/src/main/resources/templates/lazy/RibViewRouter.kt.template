@@ -5,15 +5,16 @@ import javax.inject.Inject
 import dagger.Lazy
 import javax.inject.Provider
 import io.reactivex.Observable
+import com.uber.rib.android.lazy.IRouterLazy
 
 @${rib_name}Builder.${rib_name}Scope
 class ${rib_name}Router @Inject constructor(
     interactor: ${rib_name}Interactor,
     private val presenter: ${rib_name}Presenter,
     private val routersLazy: Lazy<Map<String, @JvmSuppressWildcards Provider<Router<*>>>>
-) : Router<${rib_name}Interactor>(interactor) {
+) : Router<${rib_name}Interactor>(interactor), IRouterLazy<${rib_name}View> {
 
-    val view: Observable<${rib_name}View> get() {
+    override val view: Observable<${rib_name}View> get() {
         return presenter.view
     }
 }
