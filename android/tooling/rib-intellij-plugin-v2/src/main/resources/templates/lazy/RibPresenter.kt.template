@@ -7,6 +7,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
+import com.uber.rib.android.lazy.OnAttachStateChangeListener
 
 @${rib_name}Builder.${rib_name}Scope
 class ${rib_name}Presenter @Inject constructor(
@@ -32,7 +33,13 @@ class ${rib_name}Presenter @Inject constructor(
         builder.build(listener)
     }
 
+    override fun onViewAttachedToWindow(view: ${rib_name}View) {
+
+    }
+
     private fun onInflateFinished(view: View) {
+        view.addOnAttachStateChangeListener(OnAttachStateChangeListener(this)
+
         @Suppress("UNCHECKED_CAST")
         viewSubject.onNext(view as ${rib_name}View)
     }

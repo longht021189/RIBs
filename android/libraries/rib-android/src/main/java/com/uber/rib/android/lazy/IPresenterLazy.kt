@@ -11,6 +11,8 @@ import io.reactivex.Observer
 interface IPresenterLazy<T: View> {
     val view: Observable<T>
 
+    fun onViewAttachedToWindow(view: T)
+
     class Builder {
 
         private val type: BuilderType

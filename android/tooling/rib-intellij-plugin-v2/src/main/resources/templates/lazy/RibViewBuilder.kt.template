@@ -49,7 +49,7 @@ class ${rib_name}Builder private constructor(injector: DispatchingAndroidInjecto
         @dagger.Binds
         internal abstract fun bind${rib_name}Presenter(
             presenter: ${rib_name}Presenter
-        ) : IPresenterLazy<View>
+        ) : IPresenterLazy<*>
 
         @dagger.Module
         companion object {

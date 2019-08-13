@@ -6,19 +6,12 @@ import android.view.ViewGroup
 import com.uber.rib.core.IViewRouter
 import com.uber.rib.core.RibActivity
 import com.uber.rib.core.RibRefWatcher
-import com.uber.rib.core.Router
 import com.uber.rib.core.navigation.Navigation
-import com.uber.rib.android.navigation.Navigation as Nav
 import dagger.android.AndroidInjection
-import javax.inject.Inject
-import javax.inject.Provider
 
 class MainActivity : RibActivity() {
 
-    @Inject lateinit var map: Map<String, @JvmSuppressWildcards Provider<Router<*>>>
-    @Inject lateinit var navigation: NavigationManager
-
-    private var rootNavigation: Nav? = null
+    //@Inject lateinit var map: Map<String, @JvmSuppressWildcards Provider<Router<*>>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -30,9 +23,9 @@ class MainActivity : RibActivity() {
     }
 
     override fun createRouter(parentViewGroup: ViewGroup?): IViewRouter<*> {
-        val router = map["ROOT"]?.get()!!
-        rootNavigation = navigation.createIfNotExists(router.tag)
-        return router as IViewRouter<*>
+        /*val router = map["ROOT"]?.get()!!
+        return router as IViewRouter<*>*/
+        TODO()
     }
 
     override fun getNavigation(): Navigation? {
