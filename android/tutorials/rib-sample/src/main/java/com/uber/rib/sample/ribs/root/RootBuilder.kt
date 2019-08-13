@@ -1,6 +1,6 @@
-package com.uber.rib.sample.root.splash
+package com.uber.rib.sample.ribs.root
 
-import android.view.View
+import android.view.ViewGroup
 import com.uber.rib.core.Router
 import com.uber.rib.sample.MainActivity
 import dagger.Provides
@@ -9,9 +9,9 @@ import dagger.multibindings.IntoMap
 import dagger.multibindings.StringKey
 import javax.inject.Inject
 
-class SplashBuilder private constructor(injector: DispatchingAndroidInjector<Any>) {
+class RootBuilder private constructor(injector: DispatchingAndroidInjector<Any>) {
 
-    @Inject internal lateinit var router: SplashRouter
+    @Inject internal lateinit var router: RootRouter
 
     init {
         injector.inject(this)
@@ -20,17 +20,17 @@ class SplashBuilder private constructor(injector: DispatchingAndroidInjector<Any
     @dagger.Module
     abstract class ParentModule {
 
-        @SplashScope
+        @RootScope
         @dagger.android.ContributesAndroidInjector(modules = [Module::class])
-        abstract fun contributeSplashBuilderInjector(): SplashBuilder
+        abstract fun contributeRootBuilderInjector(): RootBuilder
 
         @dagger.Module
         companion object {
 
             @JvmStatic @Provides
-            @StringKey("SPLASH") @IntoMap
-            fun provideSplashBuilder(injector: DispatchingAndroidInjector<Any>): Router<*> {
-                return SplashBuilder(injector).router
+            @StringKey("ROOT") @IntoMap
+            fun provideRootBuilder(injector: DispatchingAndroidInjector<Any>): Router<*> {
+                return RootBuilder(injector).router
             }
         }
     }
@@ -38,32 +38,32 @@ class SplashBuilder private constructor(injector: DispatchingAndroidInjector<Any
     @dagger.Module
     internal abstract class Module {
 
-        @SplashScope
+        @RootScope
         @dagger.Binds
-        internal abstract fun presenter(view: SplashView): SplashInteractor.SplashPresenter
+        internal abstract fun presenter(view: RootView): RootInteractor.RootPresenter
 
-        @SplashScope
-        @SplashQualifier
+        @RootScope
+        @RootQualifier
         @dagger.Binds
-        internal abstract fun bindSplashView(view: SplashView): View
+        internal abstract fun bindRootViewGroup(view: RootView): ViewGroup
 
         @dagger.Module
         companion object {
 
-            @SplashScope
+            @RootScope
             @dagger.Provides
             @JvmStatic
-            internal fun inflateSplashView(activity: MainActivity): SplashView {
-                return SplashView(activity)
+            internal fun inflateRootView(activity: MainActivity): RootView {
+                return RootView(activity)
             }
         }
     }
 
     @javax.inject.Scope
     @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
-    internal annotation class SplashScope
+    internal annotation class RootScope
 
     @javax.inject.Qualifier
     @kotlin.annotation.Retention(AnnotationRetention.BINARY)
-    internal annotation class SplashQualifier
+    internal annotation class RootQualifier
 }

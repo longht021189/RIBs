@@ -39,7 +39,7 @@ public class Router<I extends com.uber.rib.core.Interactor> {
   private final Thread mainThread;
   private final com.uber.rib.core.RibRefWatcher ribRefWatcher;
 
-  private String tag;
+  private String tag = getClass().getName();
 
   @Nullable private Bundle savedInstanceState;
 
@@ -217,7 +217,7 @@ public class Router<I extends com.uber.rib.core.Interactor> {
    *
    * @return Tag.
    */
-  String getTag() {
+  public String getTag() {
     return tag;
   }
 

@@ -1,4 +1,4 @@
-package com.uber.rib.sample.root
+package com.uber.rib.sample.ribs.root
 
 import android.content.Context
 import android.util.AttributeSet
