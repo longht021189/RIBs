@@ -8,39 +8,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 import com.uber.rib.android.lazy.OnAttachStateChangeListener
+import com.uber.rib.android.lazy.BasePresenter
 
 @${rib_name}Builder.${rib_name}Scope
 class ${rib_name}Presenter @Inject constructor(
     @${rib_name}Builder.${rib_name}Qualifier
     builder: IPresenterLazy.Builder
-) : ${rib_name}Interactor.${rib_name}Presenter, IPresenterLazy<${rib_name}View> {
-
-    private val viewSubject by lazy {
-        BehaviorSubject.create<${rib_name}View>()
-    }
-    private val listener by lazy {
-        AsyncLayoutInflater.OnInflateFinishedListener {
-                view, _, _ -> onInflateFinished(view)
-        }
-    }
-
-    override val view: Observable<${rib_name}View> get() {
-        return viewSubject
-            .observeOn(AndroidSchedulers.mainThread())
-    }
-
-    init {
-        builder.build(listener)
-    }
-
-    override fun onViewAttachedToWindow(view: ${rib_name}View) {
-
-    }
-
-    private fun onInflateFinished(view: View) {
-        view.addOnAttachStateChangeListener(OnAttachStateChangeListener(this)
-
-        @Suppress("UNCHECKED_CAST")
-        viewSubject.onNext(view as ${rib_name}View)
-    }
-}
+) : ${rib_name}Interactor.${rib_name}Presenter, BasePresenter<${rib_name}View>(builder)

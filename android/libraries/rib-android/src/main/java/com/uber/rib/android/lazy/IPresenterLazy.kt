@@ -12,6 +12,7 @@ interface IPresenterLazy<T: View> {
     val view: Observable<T>
 
     fun onViewAttachedToWindow(view: T)
+    fun onViewDetachedFromWindow(view: T)
 
     class Builder {
 

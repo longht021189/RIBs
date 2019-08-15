@@ -8,7 +8,10 @@ class OnAttachStateChangeListener<T: View>(
 ) : View.OnAttachStateChangeListener {
     private val presenterRef = WeakReference(presenter)
 
-    override fun onViewDetachedFromWindow(view: View) {}
+    override fun onViewDetachedFromWindow(view: View) {
+        @Suppress("UNCHECKED_CAST")
+        presenterRef.get()?.onViewDetachedFromWindow(view as T)
+    }
 
     override fun onViewAttachedToWindow(view: View) {
         @Suppress("UNCHECKED_CAST")
