@@ -16,7 +16,7 @@ abstract class BasePresenter<T: View>(
         BehaviorSubject.create<Optional<T>>()
     }
 
-    private val viewSubject by lazy {
+    protected open val viewSubject by lazy {
         BehaviorSubject.create<T>()
     }
     private val listener by lazy {
@@ -31,7 +31,7 @@ abstract class BasePresenter<T: View>(
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    val attachedView: Observable<Optional<T>> get() {
+    override val attachedView: Observable<Optional<T>> get() {
         return attachedViewSubject
             .distinctUntilChanged()
             .observeOn(AndroidSchedulers.mainThread())

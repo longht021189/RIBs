@@ -7,9 +7,11 @@ import androidx.annotation.LayoutRes
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater
 import io.reactivex.Observable
 import io.reactivex.Observer
+import com.google.common.base.Optional
 
 interface IPresenterLazy<T: View> {
     val view: Observable<T>
+    val attachedView: Observable<Optional<T>>
 
     fun onViewAttachedToWindow(view: T)
     fun onViewDetachedFromWindow(view: T)
