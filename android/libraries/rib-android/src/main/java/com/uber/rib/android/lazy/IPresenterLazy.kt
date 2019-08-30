@@ -5,9 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater
+import com.google.common.base.Optional
 import io.reactivex.Observable
 import io.reactivex.Observer
-import com.google.common.base.Optional
 
 interface IPresenterLazy<T: View> {
     val view: Observable<T>
@@ -24,7 +24,7 @@ interface IPresenterLazy<T: View> {
 
         private lateinit var viewGroup: ViewGroup
         private lateinit var context: Context
-        private lateinit var presenter: IPresenterLazy<View>
+        private lateinit var presenter: IPresenterLazy<*>
 
         constructor(parent: ViewGroup, @LayoutRes resId: Int) {
             this.type = BuilderType.ViewGroup
@@ -36,7 +36,7 @@ interface IPresenterLazy<T: View> {
             this.resId = resId
             this.context = context
         }
-        constructor(parent: IPresenterLazy<View>, @LayoutRes resId: Int) {
+        constructor(parent: IPresenterLazy<*>, @LayoutRes resId: Int) {
             this.type = BuilderType.IPresenterLazy
             this.resId = resId
             this.presenter = parent
