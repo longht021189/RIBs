@@ -1,0 +1,3 @@
+include ':rib-sample', ':rib-android'
+
+rootProject.name='Rib Sample'
