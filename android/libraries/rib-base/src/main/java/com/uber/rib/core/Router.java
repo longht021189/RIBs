@@ -254,7 +254,7 @@ public class Router<I extends com.uber.rib.core.Interactor> {
   public boolean onError(@NonNull Throwable error) {
     if (children.size() > 0) {
       for (Router child : children) {
-        if (child.handleBackPress()) {
+        if (child.onError(error)) {
           return true;
         }
       }

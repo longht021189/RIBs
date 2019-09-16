@@ -38,7 +38,7 @@ abstract class SimpleRibActivity : AppCompatActivity() {
         super.onBackPressed()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         routerInstance?.saveInstanceState(WrappedBundle(outState))
     }

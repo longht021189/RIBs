@@ -12,9 +12,9 @@ import com.uber.rib.core.Bundle as WrappedBundle
 
 abstract class SimpleRibDialog : DialogFragment() {
 
-    private var routerInstance: IViewRouter<*>? = null
+    private var routerInstance: Router<*>? = null
 
-    protected val router: IViewRouter<*>? get() = routerInstance
+    protected val router: Router<*>? get() = routerInstance
     protected val interactor: Interactor<*, *>? get() = routerInstance?.interactor
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -27,7 +27,7 @@ abstract class SimpleRibDialog : DialogFragment() {
 
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val router = createRouter()
         val bundle = if (savedInstanceState != null) {
             WrappedBundle(savedInstanceState)
@@ -37,9 +37,11 @@ abstract class SimpleRibDialog : DialogFragment() {
 
         router.dispatchAttach(bundle)
 
-        routerInstance = router
+        if (router is IViewRouter<*>) {
+            getContentView(view).addView(router.view)
+        }
 
-        return router.view
+        routerInstance = router
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -54,7 +56,11 @@ abstract class SimpleRibDialog : DialogFragment() {
         super.onDestroyView()
     }
 
-    protected abstract fun createRouter(): IViewRouter<*>
+    protected open fun getContentView(view: View): ViewGroup {
+        return view as ViewGroup
+    }
+
+    protected abstract fun createRouter(): Router<*>
 
     class RibDialog(
         context: Context, themeResId: Int,
