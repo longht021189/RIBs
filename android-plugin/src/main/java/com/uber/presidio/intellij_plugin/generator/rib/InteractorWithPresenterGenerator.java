@@ -21,8 +21,10 @@ public class InteractorWithPresenterGenerator extends Generator {
 
   private static final String TEMPLATE_NAME = "RibInteractorWithPresenter";
 
-  public InteractorWithPresenterGenerator(String packageName, String ribName, boolean isKotlinSelected, boolean isSubcomponent, boolean useNavigation, boolean createViewAsync) {
-    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME, isSubcomponent, useNavigation, false, false, createViewAsync);
+  public InteractorWithPresenterGenerator(String packageName, String ribName, boolean isKotlinSelected) {
+
+    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME);
+
   }
 
   @Override

@@ -16,9 +16,13 @@
 package com.uber.presidio.intellij_plugin.action.rib;
 
 import com.intellij.openapi.ui.DialogWrapper;
+
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  * Dialog that prompts the user for information required to generate a new rib.
@@ -30,13 +34,6 @@ public class GenerateRibDialog extends DialogWrapper {
   private JTextField ribNameTextField;
   private JCheckBox createPresenterAndViewCheckBox;
   private JCheckBox createKotlinCode;
-  private JCheckBox createSubcomponent;
-  private JCheckBox createLayout;
-  private JCheckBox createViewAsync;
-  private JCheckBox useNavigation;
-  private JCheckBox useQualifier;
-  private JRadioButton useQualifierView;
-  private JRadioButton useQualifierViewGroup;
 
   public GenerateRibDialog(final Listener listener) {
     super(null);
@@ -44,49 +41,7 @@ public class GenerateRibDialog extends DialogWrapper {
     init();
 
     createPresenterAndViewCheckBox.setSelected(true);
-    createPresenterAndViewCheckBox.addActionListener(actionEvent -> {
-      if (createPresenterAndViewCheckBox.isSelected()) {
-        createLayout.setEnabled(false);
-        createViewAsync.setEnabled(true);
-      } else {
-        createLayout.setEnabled(false);
-        createViewAsync.setEnabled(false);
-      }
-    });
-
-    useNavigation.setSelected(true);
     createKotlinCode.setSelected(true);
-    createSubcomponent.setSelected(true);
-
-    createLayout.setSelected(false);
-    createViewAsync.setSelected(true);
-
-    createLayout.setEnabled(false);
-    createViewAsync.setEnabled(true);
-
-    useQualifier.setSelected(true);
-    useQualifierView.setSelected(true);
-    useQualifierViewGroup.setSelected(false);
-
-    useQualifier.addActionListener(actionEvent -> {
-      if (useQualifier.isSelected()) {
-        useQualifierView.setEnabled(true);
-        useQualifierViewGroup.setEnabled(true);
-      } else {
-        useQualifierView.setEnabled(false);
-        useQualifierViewGroup.setEnabled(false);
-      }
-    });
-    useQualifierView.addActionListener(actionEvent -> {
-      if (useQualifierView.isSelected()) {
-        useQualifierViewGroup.setSelected(false);
-      }
-    });
-    useQualifierViewGroup.addActionListener(actionEvent -> {
-      if (useQualifierViewGroup.isSelected()) {
-        useQualifierView.setSelected(false);
-      }
-    });
   }
 
   @Nullable
@@ -102,13 +57,7 @@ public class GenerateRibDialog extends DialogWrapper {
     this.listener.onGenerateClicked(
         ribNameTextField.getText(),
         createPresenterAndViewCheckBox.isSelected(),
-        createKotlinCode.isSelected(),
-        createSubcomponent.isSelected(),
-        createLayout.isSelected(),
-        createViewAsync.isSelected(),
-        useNavigation.isSelected(),
-            useQualifierView.isEnabled() && useQualifierView.isSelected(),
-            useQualifierViewGroup.isEnabled() && useQualifierViewGroup.isSelected());
+        createKotlinCode.isSelected());
   }
 
   /**
@@ -123,10 +72,6 @@ public class GenerateRibDialog extends DialogWrapper {
      * @param createPresenterAndView {@code true} when a presenter and a corresponding view should
      *                               be created, {@code false} otherwise.
      */
-    void onGenerateClicked(
-            String ribName, boolean createPresenterAndView,
-            boolean isKotlinSelected, boolean isSubcomponent, boolean createLayout,
-            boolean createViewAsync, boolean useNavigation, boolean useQualifierView,
-            boolean useQualifierViewGroup);
+    void onGenerateClicked(String ribName, boolean createPresenterAndView, boolean isKotlinSelected);
   }
 }

@@ -37,6 +37,9 @@ android {
         main.java.srcDirs += '../../android/libraries/rib-base/src/main/java'
         main.java.srcDirs += '../../android/libraries/rib-android/src/main/java'
         main.java.srcDirs += '../../android/libraries/rib-uava/src/main/java'
+
+        main.assets.srcDirs += '../../android-plugin/src/main/resources'
+        main.assets.srcDirs += '../../android-plugin/src/main/java'
     }
 }
 

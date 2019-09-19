@@ -21,8 +21,8 @@ public class RouterGenerator extends Generator {
 
   private static final String TEMPLATE_NAME = "RibRouter";
 
-  public RouterGenerator(String packageName, String ribName, boolean isKotlinSelected, boolean isSubcomponent) {
-    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME, isSubcomponent, false, false, false, false);
+  public RouterGenerator(String packageName, String ribName, boolean isKotlinSelected) {
+    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME);
   }
 
   @Override

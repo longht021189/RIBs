@@ -21,10 +21,8 @@ public class ViewRouterGenerator extends Generator {
 
   private static final String TEMPLATE_NAME = "RibViewRouter";
 
-  public ViewRouterGenerator(String packageName, String ribName, boolean isKotlinSelected,
-                             boolean isSubcomponent, boolean useQualifierView, boolean useQualifierViewGroup, boolean createViewAsync) {
-    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME, isSubcomponent,
-            false, useQualifierView, useQualifierViewGroup, createViewAsync);
+  public ViewRouterGenerator(String packageName, String ribName, boolean isKotlinSelected) {
+    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME);
   }
 
   @Override

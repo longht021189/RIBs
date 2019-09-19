@@ -1,9 +1,9 @@
 package ${package_name};
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import android.view.View;
 
-import com.uber.rib.core.VatoViewRouter;
+import com.uber.rib.core.ViewRouter;
 
 /**
  * Adds and removes children of {@link ${rib_name}Builder.${rib_name}Scope}.
@@ -11,7 +11,7 @@ import com.uber.rib.core.VatoViewRouter;
  * TODO describe the possible child configurations of this scope.
  */
 public class ${rib_name}Router extends
-    VatoViewRouter<${rib_name}View, ${rib_name}Interactor, ${rib_name}Builder.Component> {
+    ViewRouter<${rib_name}View, ${rib_name}Interactor, ${rib_name}Builder.Component> {
 
   public ${rib_name}Router(
       ${rib_name}View view,

@@ -18,6 +18,7 @@ package com.uber.presidio.intellij_plugin.generator;
 import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.google.common.io.CharStreams;
+
 import org.apache.commons.lang.text.StrSubstitutor;
 
 import java.io.File;
@@ -27,7 +28,11 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -43,7 +48,6 @@ public abstract class Generator {
   private static final String TEMPLATE_TOKEN_PACKAGE_NAME = "package_name";
   private static final String TEMPLATE_TOKEN_RIBLET_NAME = "rib_name";
   private static final String TEMPLATE_TOKEN_RIBLET_NAME_TO_LOWER = "rib_name_to_lower";
-  private static final String TEMPLATE_TOKEN_RIBLET_NAME_TO_UPPER = "rib_name_to_upper";
 
   private final String packageName;
   private final String ribName;
@@ -56,9 +60,7 @@ public abstract class Generator {
    * @param ribName      rib name.
    * @param templateName template to be used by this generate.
    */
-  public Generator(String packageName, String ribName, boolean isKotlin,
-                   String templateName, boolean isSubcomponent, boolean useNavigation,
-                   boolean useQualifierView, boolean useQualifierViewGroup, boolean createViewAsync) {
+  public Generator(String packageName, String ribName, boolean isKotlin, String templateName) {
     this.packageName = packageName;
     this.ribName = ribName;
     this.isKotlin = isKotlin;
@@ -67,7 +69,6 @@ public abstract class Generator {
     templateValuesMap.put(TEMPLATE_TOKEN_PACKAGE_NAME, packageName);
     templateValuesMap.put(TEMPLATE_TOKEN_RIBLET_NAME, ribName);
     templateValuesMap.put(TEMPLATE_TOKEN_RIBLET_NAME_TO_LOWER, ribName.toLowerCase());
-    templateValuesMap.put(TEMPLATE_TOKEN_RIBLET_NAME_TO_UPPER, ribName.toUpperCase());
 
     try {
       String[] resources = getResourceListing(this.getClass(), "partials/");
@@ -94,26 +95,7 @@ public abstract class Generator {
       String resource = "/templates/java/" + templateName + ".java.template";
 
       if (isKotlin) {
-        if (isSubcomponent) {
-          if (useNavigation) {
-            resource = "/templates/kotlin_subcom_nav/" + templateName + ".kt.template";
-          } else {
-            if (useQualifierView) {
-              resource = "/templates/kotlin_subcom_q_v/" + templateName + ".kt.template";
-            } else if (useQualifierViewGroup) {
-              resource = "/templates/kotlin_subcom_q_vg/" + templateName + ".kt.template";
-            } else {
-              resource = "/templates/kotlin_subcom/" + templateName + ".kt.template";
-            }
-          }
-        } else {
-          resource = "/templates/kotlin/" + templateName + ".kt.template";
-        }
-      } else if (isSubcomponent) {
-        resource = "/templates/java_subcom/" + templateName + ".java.template";
-      }
-      if (createViewAsync) {
-        resource = "/templates/lazy/" + templateName + ".kt.template";
+        resource = "/templates/kotlin/" + templateName + ".kt.template";
       }
 
       InputStream resourceAsStream1 =

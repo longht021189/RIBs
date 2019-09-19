@@ -22,8 +22,8 @@ public class InteractorWithEmptyPresenterTestGenerator extends Generator {
   private static final String TEMPLATE_NAME =
       "RibInteractorWithEmptyPresenterTest";
 
-  public InteractorWithEmptyPresenterTestGenerator(String packageName, String ribName, boolean isKotlinSelected, boolean isSubcomponent) {
-    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME, isSubcomponent, false, false, false, false);
+  public InteractorWithEmptyPresenterTestGenerator(String packageName, String ribName, boolean isKotlinSelected) {
+    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME);
   }
 
   @Override

@@ -1,6 +1,6 @@
 package ${package_name};
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 
 import com.uber.rib.core.Builder;
 import com.uber.rib.core.EmptyPresenter;
