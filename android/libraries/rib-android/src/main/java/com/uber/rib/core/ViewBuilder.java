@@ -27,6 +27,7 @@ import android.view.ViewGroup;
  * @param <RouterT> type of router built by this builder.
  * @param <DependencyT> dependency required to create this router.
  */
+@Deprecated
 public abstract class ViewBuilder<ViewType extends View, RouterT extends Router, DependencyT>
     extends Builder<RouterT, DependencyT> {
 

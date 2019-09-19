@@ -25,6 +25,7 @@ import android.view.Gravity;
 import android.view.View;
 
 /** Utility class that shows riblets name in its background. */
+@Deprecated
 public final class XRay {
 
   private static final XRay INSTANCE = new XRay();

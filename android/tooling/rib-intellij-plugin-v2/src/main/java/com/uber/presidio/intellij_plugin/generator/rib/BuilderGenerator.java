@@ -25,7 +25,7 @@ public class BuilderGenerator extends Generator {
                           boolean isKotlinSelected, boolean isSubcomponent) {
     super(packageName, ribName, isKotlinSelected,
             TEMPLATE_NAME, isSubcomponent, false,
-            false, false);
+            false, false, false);
   }
 
   @Override

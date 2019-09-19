@@ -22,7 +22,7 @@ public class InteractorWithEmptyPresenterGenerator extends Generator {
   private static final String TEMPLATE_NAME = "RibInteractorWithEmptyPresenter";
 
   public InteractorWithEmptyPresenterGenerator(String packageName, String ribName, boolean isKotlinSelected, boolean isSubcomponent, boolean useNavigation) {
-    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME, isSubcomponent, useNavigation, false, false);
+    super(packageName, ribName, isKotlinSelected, TEMPLATE_NAME, isSubcomponent, useNavigation, false, false, false);
   }
 
   @Override

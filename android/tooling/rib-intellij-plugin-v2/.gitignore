@@ -165,3 +165,4 @@ annotations/
 /build
 /captures
 .externalNativeBuild
+/out
