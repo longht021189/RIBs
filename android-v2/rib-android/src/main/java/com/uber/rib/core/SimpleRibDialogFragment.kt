@@ -1,5 +1,6 @@
 package com.uber.rib.core
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +14,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 abstract class SimpleRibDialogFragment : DialogFragment() {
 
     private var routerInstance: SimpleRouter? = null
-
-    protected val listener: SimpleDialog.Listener by lazy {
+    private val listener: SimpleDialog.Listener by lazy {
         object : SimpleDialog.Listener {
             override fun onCreateDialog(dialog: SimpleDialog) {
                 this@SimpleRibDialogFragment.onCreateDialog(dialog)
@@ -25,6 +25,7 @@ abstract class SimpleRibDialogFragment : DialogFragment() {
             }
         }
     }
+
     protected val router: SimpleRouter? get() = routerInstance
 
     override fun onCreateDialog(savedInstanceState: Bundle?): SimpleDialog {
@@ -53,6 +54,18 @@ abstract class SimpleRibDialogFragment : DialogFragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         routerInstance?.saveInstanceState(outState)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (router?.onActivityResult(requestCode, resultCode, data) != true) {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (router?.onRequestPermissionsResult(requestCode, permissions, grantResults) != true) {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        }
     }
 
     override fun onDestroyView() {

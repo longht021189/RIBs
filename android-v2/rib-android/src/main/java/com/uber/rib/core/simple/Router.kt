@@ -1,10 +1,12 @@
 package com.uber.rib.core.simple
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.CallSuper
 import androidx.collection.ArraySet
 import com.uber.autodispose.ScopeProvider
 import com.uber.rib.core.SimpleRouter
+import java.util.*
 
 abstract class Router(
     override val interactor: Interactor
@@ -13,8 +15,8 @@ abstract class Router(
     private val helper by lazy {
         InteractorHelper()
     }
-    private val children by lazy {
-        ArraySet<SimpleRouter>()
+    private val childrenStack by lazy {
+        Stack<LinkedList<SimpleRouter>>()
     }
     private var state: Bundle? = null
 
@@ -52,6 +54,14 @@ abstract class Router(
         }
 
         interactor.onSaveInstanceState(outState)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     @CallSuper override fun dispatchDetach() {
