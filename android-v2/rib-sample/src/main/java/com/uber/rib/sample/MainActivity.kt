@@ -2,10 +2,8 @@ package com.uber.rib.sample
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
 import com.uber.rib.core.Router
-import com.uber.rib.core.SimpleRibActivity
-
+import com.uber.rib.corev2.SimpleRibActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : SimpleRibActivity() {
