@@ -1,16 +1,21 @@
 package com.uber.rib.corev2.simple
 
+import android.content.Intent
 import android.os.Bundle
 import com.uber.autodispose.ScopeProvider
 import com.uber.rib.corev2.SimpleInteractor
 
 abstract class Interactor : SimpleInteractor {
 
-    open fun didBecomeActive(bundle: Bundle?, provider: ScopeProvider) { }
+    override fun didBecomeActive(bundle: Bundle?, provider: ScopeProvider) = Unit
 
-    open fun handleBackPress(): Boolean = false
+    override fun handleBackPress(): Boolean = false
 
-    open fun onSaveInstanceState(bundle: Bundle) { }
+    override fun onSaveInstanceState(bundle: Bundle) = Unit
 
-    open fun willResignActive() { }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean = false
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray): Boolean = false
+
+    override fun willResignActive() = Unit
 }
