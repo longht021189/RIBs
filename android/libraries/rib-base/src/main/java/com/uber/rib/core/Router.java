@@ -15,6 +15,7 @@
  */
 package com.uber.rib.core;
 
+import android.content.Intent;
 import android.os.Looper;
 import androidx.annotation.*;
 
@@ -261,5 +262,29 @@ public class Router<I extends com.uber.rib.core.Interactor> {
     }
 
     return getInteractor().onError(error);
+  }
+
+  public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (children.size() > 0) {
+      for (Router child : children) {
+        if (child.onActivityResult(requestCode, resultCode, data)) {
+          return true;
+        }
+      }
+    }
+
+    return getInteractor().onActivityResult(requestCode, resultCode, data);
+  }
+
+  public boolean onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    if (children.size() > 0) {
+      for (Router child : children) {
+        if (child.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
+          return true;
+        }
+      }
+    }
+
+    return getInteractor().onRequestPermissionsResult(requestCode, permissions, grantResults);
   }
 }

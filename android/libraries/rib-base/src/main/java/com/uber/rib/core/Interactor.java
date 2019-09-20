@@ -15,6 +15,8 @@
  */
 package com.uber.rib.core;
 
+import android.content.Intent;
+
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -179,6 +181,14 @@ public abstract class Interactor<P, R extends Router>
   }
 
   public boolean onError(@NonNull Throwable error) {
+    return false;
+  }
+
+  public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+    return false;
+  }
+
+  public boolean onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
     return false;
   }
 }
