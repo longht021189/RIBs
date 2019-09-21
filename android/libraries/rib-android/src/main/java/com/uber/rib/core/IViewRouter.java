@@ -1,7 +1,6 @@
 package com.uber.rib.core;
 
 import android.view.View;
-import androidx.annotation.NonNull;
 
 public interface IViewRouter<V extends View> {
     V getView();
@@ -10,5 +9,4 @@ public interface IViewRouter<V extends View> {
     Interactor getInteractor();
     void saveInstanceState(Bundle bundle);
     void dispatchAttach(Bundle bundle);
-    boolean onError(@NonNull Throwable error);
 }
