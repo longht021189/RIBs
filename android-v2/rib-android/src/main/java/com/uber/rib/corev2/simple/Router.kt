@@ -15,6 +15,9 @@ abstract class Router(
     private val helper by lazy {
         InteractorHelper()
     }
+    private val children by lazy {
+        LinkedList<SimpleRouter>()
+    }
     private val childrenStack by lazy {
         Stack<LinkedList<SimpleRouter>>()
     }
