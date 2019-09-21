@@ -17,7 +17,12 @@ package com.uber.rib.core;
 
 import android.content.Intent;
 import android.os.Looper;
-import androidx.annotation.*;
+
+import androidx.annotation.CallSuper;
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 
 import java.util.List;
 import java.util.Locale;
@@ -252,7 +257,7 @@ public class Router<I extends com.uber.rib.core.Interactor> {
     }
   }
 
-  public boolean onError(@NonNull Throwable error) {
+  public boolean onError(@NonNull Object error) {
     if (children.size() > 0) {
       for (Router child : children) {
         if (child.onError(error)) {

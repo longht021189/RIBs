@@ -20,6 +20,7 @@ import android.content.Intent;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.jakewharton.rxrelay2.BehaviorRelay;
 import com.jakewharton.rxrelay2.Relay;
 import com.uber.autodispose.lifecycle.CorrespondingEventsFunction;
@@ -28,11 +29,12 @@ import com.uber.autodispose.lifecycle.LifecycleScopeProvider;
 import com.uber.autodispose.lifecycle.LifecycleScopes;
 import com.uber.rib.core.lifecycle.InteractorEvent;
 import com.uber.rib.core.navigation.Node;
+
+import java.util.Map;
+
 import dagger.Lazy;
 import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
-
-import java.util.Map;
 
 import static com.uber.rib.core.lifecycle.InteractorEvent.ACTIVE;
 import static com.uber.rib.core.lifecycle.InteractorEvent.INACTIVE;
@@ -180,7 +182,7 @@ public abstract class Interactor<P, R extends Router>
     return data;
   }
 
-  public boolean onError(@NonNull Throwable error) {
+  public boolean onError(@NonNull Object error) {
     return false;
   }
 
