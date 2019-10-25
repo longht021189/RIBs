@@ -1,6 +1,6 @@
 package library.rxux.core
 
-enum class StoreState {
+enum class RouterState {
     Attached,
     Detached
 }

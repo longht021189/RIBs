@@ -9,32 +9,32 @@ import com.uber.autodispose.lifecycle.LifecycleScopes
 import io.reactivex.CompletableSource
 import io.reactivex.Observable
 
-class StoreScopeProvider : LifecycleScopeProvider<StoreState> {
+class RouterScopeProvider : LifecycleScopeProvider<RouterState> {
 
-    private val behaviorRelay: BehaviorRelay<StoreState> by lazy {
-        BehaviorRelay.create<StoreState>()
+    private val behaviorRelay: BehaviorRelay<RouterState> by lazy {
+        BehaviorRelay.create<RouterState>()
     }
-    private val lifecycleRelay: Relay<StoreState> by lazy {
+    private val lifecycleRelay: Relay<RouterState> by lazy {
         behaviorRelay.toSerialized()
     }
 
     fun dispatchAttach() {
-        lifecycleRelay.accept(StoreState.Attached)
+        lifecycleRelay.accept(RouterState.Attached)
     }
 
     fun dispatchDetach() {
-        lifecycleRelay.accept(StoreState.Detached)
+        lifecycleRelay.accept(RouterState.Detached)
     }
 
-    override fun lifecycle(): Observable<StoreState> {
+    override fun lifecycle(): Observable<RouterState> {
         return lifecycleRelay.hide()
     }
 
-    override fun correspondingEvents(): CorrespondingEventsFunction<StoreState> {
+    override fun correspondingEvents(): CorrespondingEventsFunction<RouterState> {
         return LIFECYCLE_MAP_FUNCTION
     }
 
-    override fun peekLifecycle(): StoreState? {
+    override fun peekLifecycle(): RouterState? {
         return behaviorRelay.value
     }
 
@@ -44,9 +44,9 @@ class StoreScopeProvider : LifecycleScopeProvider<StoreState> {
 
     companion object {
         private val LIFECYCLE_MAP_FUNCTION by lazy {
-            CorrespondingEventsFunction<StoreState> {
+            CorrespondingEventsFunction<RouterState> {
                 when (it) {
-                    StoreState.Attached -> StoreState.Detached
+                    RouterState.Attached -> RouterState.Detached
                     else -> throw LifecycleEndedException()
                 }
             }
