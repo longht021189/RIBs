@@ -1,3 +1,7 @@
-include ':rib-sample', ':rib-android', ':rxux', ':rxux-compiler', ':rxux-annotation'
+include ':rib-sample', ':rib-android', ':libDurian', ':libDurian-Annotation', ':libDurian-Compiler'
 
 rootProject.name='Rib Sample'
+
+project(':libDurian').projectDir = new File('../library/android/libDurian')
+project(':libDurian-Annotation').projectDir = new File('../library/android/libDurian-Annotation')
+project(':libDurian-Compiler').projectDir = new File('../library/android/libDurian-Compiler')

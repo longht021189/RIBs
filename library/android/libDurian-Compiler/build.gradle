@@ -1,0 +1,25 @@
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation project(':libDurian-Annotation')
+    implementation 'com.squareup:javapoet:1.11.1'
+    implementation 'com.google.guava:guava:28.1-jre'
+    implementation 'com.squareup:kotlinpoet:1.4.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.13'
+    implementation 'com.google.auto:auto-common:0.10'
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
