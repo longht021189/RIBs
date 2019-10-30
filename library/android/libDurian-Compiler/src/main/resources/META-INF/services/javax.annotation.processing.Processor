@@ -1,1 +1,2 @@
 library.compiler.redux.ToStoreProcessor
+library.compiler.gson.FromMapProcessor

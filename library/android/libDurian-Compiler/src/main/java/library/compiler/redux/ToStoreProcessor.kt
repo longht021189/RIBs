@@ -6,6 +6,7 @@ import javax.annotation.processing.RoundEnvironment
 import javax.lang.model.element.ElementKind
 import javax.lang.model.element.TypeElement
 import javax.lang.model.type.DeclaredType
+import javax.tools.Diagnostic
 
 class ToStoreProcessor : BaseProcessor() {
 
@@ -52,6 +53,16 @@ class ToStoreProcessor : BaseProcessor() {
 
             val stateTypeElement = stateTypeElementValue
                 ?: throw RuntimeException("Don't Find State Type in ${element.qualifiedName}")
+
+            element.enclosedElements.forEach {
+                messager.printMessage(Diagnostic.Kind.WARNING, "======4> $it, ${it.javaClass}")
+            }
+            element.enclosingElement.let {
+                messager.printMessage(Diagnostic.Kind.WARNING, "======5> $it, ${it.javaClass}")
+            }
+            element.typeParameters.forEach {
+                messager.printMessage(Diagnostic.Kind.WARNING, "======6> $it, ${it.javaClass}")
+            }
         }
 
         return false
